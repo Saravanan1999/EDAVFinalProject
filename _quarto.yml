@@ -6,11 +6,13 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "EDAV Project"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
+    - Bavna Rajan (br2794)
+    - Jinal Prakash Devadiga (jpd2207)
+    - Saravanan Hari Baskaran (sh4621)
+    
+  repo-url: https://github.com/Saravanan1999
   date: today
   page-footer:
     right: |
