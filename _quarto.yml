@@ -27,7 +27,7 @@ book:
 
 format:
   html:
-    theme: Lux
+    theme: vapor
     code-fold: true
 
 
