@@ -4,7 +4,47 @@
     "href": "index.html",
     "title": "EDAV Project",
     "section": "",
-    "text": "1 Introduction\nTest!",
+    "text": "1 Introduction\nThis project aims to analyze the performance of stocks in each sector for major corporations by identifying trends and understanding the factors influencing stock price variations across various sectors. Stock prices are determined not only by a company’s performance but also by broader market trends, sector-specific dynamics, and external economic factors.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#background",
+    "href": "index.html#background",
+    "title": "EDAV Project",
+    "section": "1.1 Background",
+    "text": "1.1 Background\nFor example, greater stock prices are frequently connected with technology companies because investors anticipate innovation and development from these companies. On the other hand, utility firms tend to have lower stock values due to the nature of their business, primarily dependent on consistent demand and regulated pricing. Understanding these distinctions is critical for investors looking to make educated decisions based on sectoral performance.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#objectives",
+    "href": "index.html#objectives",
+    "title": "EDAV Project",
+    "section": "1.2 Objectives",
+    "text": "1.2 Objectives\nThrough this analysis, we aim to explore:\n\nWhy some firms in the same industry outperform others.\nThe impact of factors such as market sentiment, growth prospects, competitive advantages, and financial soundness on stock performance.\nThe influence of external events such as economic downturns, market booms, and geopolitical crises on stock performance across sectors.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#methodology",
+    "href": "index.html#methodology",
+    "title": "EDAV Project",
+    "section": "1.3 Methodology",
+    "text": "1.3 Methodology\nTo achieve these goals, we will:\n\nUtilize bar charts, scatter plots, and sector performance comparisons to visually highlight key insights.\nAnalyze the relative success of each sector over time.\nInvestigate the underlying causes of performance disparities using data-driven approaches.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#expected-outcomes",
+    "href": "index.html#expected-outcomes",
+    "title": "EDAV Project",
+    "section": "1.4 Expected Outcomes",
+    "text": "1.4 Expected Outcomes\nBy the end of the research, we aim to present:\n\nA clear, data-driven narrative about how different sectors perform in the market.\nInsights into the variables influencing their success.\n\nThese visual tools and analyses will enable us to better understand sectoral performance and provide actionable insights for informed investment decisions.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]
@@ -14,7 +54,17 @@
     "href": "data.html",
     "title": "2  Data",
     "section": "",
-    "text": "2.1 Description",
+    "text": "2.1 Description\nFor this project, we will use historical stock data for companies in three key sectors: Technology, Finance, and Healthcare. The dataset will span five years, allowing for a robust analysis of trends over time.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#description",
+    "href": "data.html#description",
+    "title": "2  Data",
+    "section": "",
+    "text": "2.1.1 Sectors and Companies\n\n2.1.1.1 Technology:\n\nApple Inc. (AAPL)\nAlphabet Inc. Class C (GOOG)\nMeta Platforms Inc. Class A (META)\nMicrosoft Corp. (MSFT)\nNVIDIA Corporation (NVDA)\n\n\n\n2.1.1.2 Finance:\n\nBank of America (BAC)\nGoldman Sachs Group Inc. (GS)\nJPMorgan Chase & Co. (JPM)\nMorgan Stanley (MS)\nWells Fargo & Co. (WFC)\n\n\n\n2.1.1.3 Healthcare:\n\nAstraZeneca (AZN)\nJohnson & Johnson (JNJ)\nEli Lilly and Co. (LLY)\nMerck & Co., Inc. (MRK)\nPfizer Inc. (PFE)\n\n\n\n\n2.1.2 Data Source\nNasdaq collects data through its exchange from transactions conducted by various market participants, including institutional investors, brokers, market makers, and retail traders. The data encompasses details on market activity such as trades, order books, bid/ask prices, volumes, and timestamped events.\n\n2.1.2.1 Transaction Data\nEach trade, quote, and order is logged, providing insights into the dynamics of stock movements, liquidity, and market trends.\n\n\n2.1.2.2 Participants\nMarket participants, including broker-dealers and investors, generate real-time and historical data through their buying and selling activities.\n\n\n\n2.1.3 Format and Frequency\nThe data will be accessed in formats like CSV, JSON, or XML, which are compatible with analysis tools such as Python or R. The frequency of updates varies:\n\nDaily Data: Updated at the end of each trading day.\nIntraday (Minute-Level) Data: Real-time updates available during market hours.\n\n\n\n2.1.4 Key Data Dimensions\n\nDate: Trading date.\n\nOpen: Opening stock price.\n\nHigh: Highest price during the trading day.\n\nLow: Lowest price during the trading day.\n\nClose/Last: Closing price or last trade price.\n\nVolume: Total shares traded.\n\n\n\n2.1.5 Potential Issues\n\nData Gaps: Missing data during market holidays or after-hours trading.\nAdjustments: Stock splits and dividends may require corrections for consistency.\n\nData Volume: Handling minute-level data over five years for multiple companies may require significant processing power and storage.\n\n\n\n2.1.6 Data Import Plan\nThe data import strategy entails retrieving structured information from an API endpoint using HTTP requests that include appropriate headers to ensure successful communication. The JSON answer is processed and turned into a structured DataFrame, allowing for rapid data manipulation and analysis. Relevant data is then extracted and saved locally in a CSV file for further processing and analysis. This methodical methodology guarantees the smooth integration of raw data from an external source into a useful tabular format.\n\n\n2.1.7 Sources\nNasdaq’s market data services will be the primary source, with potential supplementary data from financial APIs or publicly available CSV datasets.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
     ]

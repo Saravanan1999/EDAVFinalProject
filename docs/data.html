@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; Data – EDAV Project</title>
+<title>EDAV Project - 2&nbsp; Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -78,13 +78,13 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data</span></a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -149,7 +149,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a></li>
+  <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a>
+  <ul class="collapse">
+  <li><a href="#sectors-and-companies" id="toc-sectors-and-companies" class="nav-link" data-scroll-target="#sectors-and-companies"><span class="header-section-number">2.1.1</span> Sectors and Companies</a></li>
+  <li><a href="#data-source" id="toc-data-source" class="nav-link" data-scroll-target="#data-source"><span class="header-section-number">2.1.2</span> Data Source</a></li>
+  <li><a href="#format-and-frequency" id="toc-format-and-frequency" class="nav-link" data-scroll-target="#format-and-frequency"><span class="header-section-number">2.1.3</span> Format and Frequency</a></li>
+  <li><a href="#key-data-dimensions" id="toc-key-data-dimensions" class="nav-link" data-scroll-target="#key-data-dimensions"><span class="header-section-number">2.1.4</span> Key Data Dimensions</a></li>
+  <li><a href="#potential-issues" id="toc-potential-issues" class="nav-link" data-scroll-target="#potential-issues"><span class="header-section-number">2.1.5</span> Potential Issues</a></li>
+  <li><a href="#data-import-plan" id="toc-data-import-plan" class="nav-link" data-scroll-target="#data-import-plan"><span class="header-section-number">2.1.6</span> Data Import Plan</a></li>
+  <li><a href="#sources" id="toc-sources" class="nav-link" data-scroll-target="#sources"><span class="header-section-number">2.1.7</span> Sources</a></li>
+  </ul></li>
   <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/Saravanan1999/edit/main/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Saravanan1999/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -178,6 +187,93 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
+<p>For this project, we will use historical stock data for companies in three key sectors: Technology, Finance, and Healthcare. The dataset will span five years, allowing for a robust analysis of trends over time.</p>
+<section id="sectors-and-companies" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="sectors-and-companies"><span class="header-section-number">2.1.1</span> Sectors and Companies</h3>
+<section id="technology" class="level4" data-number="2.1.1.1">
+<h4 data-number="2.1.1.1" class="anchored" data-anchor-id="technology"><span class="header-section-number">2.1.1.1</span> Technology:</h4>
+<ul>
+<li>Apple Inc.&nbsp;(AAPL)</li>
+<li>Alphabet Inc.&nbsp;Class C (GOOG)</li>
+<li>Meta Platforms Inc.&nbsp;Class A (META)</li>
+<li>Microsoft Corp.&nbsp;(MSFT)</li>
+<li>NVIDIA Corporation (NVDA)</li>
+</ul>
+</section>
+<section id="finance" class="level4" data-number="2.1.1.2">
+<h4 data-number="2.1.1.2" class="anchored" data-anchor-id="finance"><span class="header-section-number">2.1.1.2</span> Finance:</h4>
+<ul>
+<li>Bank of America (BAC)</li>
+<li>Goldman Sachs Group Inc.&nbsp;(GS)</li>
+<li>JPMorgan Chase &amp; Co.&nbsp;(JPM)</li>
+<li>Morgan Stanley (MS)</li>
+<li>Wells Fargo &amp; Co.&nbsp;(WFC)</li>
+</ul>
+</section>
+<section id="healthcare" class="level4" data-number="2.1.1.3">
+<h4 data-number="2.1.1.3" class="anchored" data-anchor-id="healthcare"><span class="header-section-number">2.1.1.3</span> Healthcare:</h4>
+<ul>
+<li>AstraZeneca (AZN)</li>
+<li>Johnson &amp; Johnson (JNJ)</li>
+<li>Eli Lilly and Co.&nbsp;(LLY)</li>
+<li>Merck &amp; Co., Inc.&nbsp;(MRK)</li>
+<li>Pfizer Inc.&nbsp;(PFE)</li>
+</ul>
+</section>
+</section>
+<section id="data-source" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="data-source"><span class="header-section-number">2.1.2</span> Data Source</h3>
+<p>Nasdaq collects data through its exchange from transactions conducted by various market participants, including institutional investors, brokers, market makers, and retail traders. The data encompasses details on market activity such as trades, order books, bid/ask prices, volumes, and timestamped events.</p>
+<section id="transaction-data" class="level4" data-number="2.1.2.1">
+<h4 data-number="2.1.2.1" class="anchored" data-anchor-id="transaction-data"><span class="header-section-number">2.1.2.1</span> Transaction Data</h4>
+<p>Each trade, quote, and order is logged, providing insights into the dynamics of stock movements, liquidity, and market trends.</p>
+</section>
+<section id="participants" class="level4" data-number="2.1.2.2">
+<h4 data-number="2.1.2.2" class="anchored" data-anchor-id="participants"><span class="header-section-number">2.1.2.2</span> Participants</h4>
+<p>Market participants, including broker-dealers and investors, generate real-time and historical data through their buying and selling activities.</p>
+</section>
+</section>
+<section id="format-and-frequency" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="format-and-frequency"><span class="header-section-number">2.1.3</span> Format and Frequency</h3>
+<p>The data will be accessed in formats like CSV, JSON, or XML, which are compatible with analysis tools such as Python or R. The frequency of updates varies:</p>
+<ul>
+<li><strong>Daily Data:</strong> Updated at the end of each trading day.</li>
+<li><strong>Intraday (Minute-Level) Data:</strong> Real-time updates available during market hours.</li>
+</ul>
+</section>
+<section id="key-data-dimensions" class="level3" data-number="2.1.4">
+<h3 data-number="2.1.4" class="anchored" data-anchor-id="key-data-dimensions"><span class="header-section-number">2.1.4</span> Key Data Dimensions</h3>
+<ul>
+<li><strong>Date:</strong> Trading date.<br>
+</li>
+<li><strong>Open:</strong> Opening stock price.<br>
+</li>
+<li><strong>High:</strong> Highest price during the trading day.<br>
+</li>
+<li><strong>Low:</strong> Lowest price during the trading day.<br>
+</li>
+<li><strong>Close/Last:</strong> Closing price or last trade price.<br>
+</li>
+<li><strong>Volume:</strong> Total shares traded.</li>
+</ul>
+</section>
+<section id="potential-issues" class="level3" data-number="2.1.5">
+<h3 data-number="2.1.5" class="anchored" data-anchor-id="potential-issues"><span class="header-section-number">2.1.5</span> Potential Issues</h3>
+<ul>
+<li><strong>Data Gaps:</strong> Missing data during market holidays or after-hours trading.</li>
+<li><strong>Adjustments:</strong> Stock splits and dividends may require corrections for consistency.<br>
+</li>
+<li><strong>Data Volume:</strong> Handling minute-level data over five years for multiple companies may require significant processing power and storage.</li>
+</ul>
+</section>
+<section id="data-import-plan" class="level3" data-number="2.1.6">
+<h3 data-number="2.1.6" class="anchored" data-anchor-id="data-import-plan"><span class="header-section-number">2.1.6</span> Data Import Plan</h3>
+<p>The data import strategy entails retrieving structured information from an API endpoint using HTTP requests that include appropriate headers to ensure successful communication. The JSON answer is processed and turned into a structured DataFrame, allowing for rapid data manipulation and analysis. Relevant data is then extracted and saved locally in a CSV file for further processing and analysis. This methodical methodology guarantees the smooth integration of raw data from an external source into a useful tabular format.</p>
+</section>
+<section id="sources" class="level3" data-number="2.1.7">
+<h3 data-number="2.1.7" class="anchored" data-anchor-id="sources"><span class="header-section-number">2.1.7</span> Sources</h3>
+<p>Nasdaq’s market data services will be the primary source, with potential supplementary data from financial APIs or publicly available CSV datasets.</p>
+</section>
 </section>
 <section id="missing-value-analysis" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.2</span> Missing value analysis</h2>
@@ -221,7 +317,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const onCopySuccess = function(e) {
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -253,29 +360,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
   });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -283,7 +368,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
