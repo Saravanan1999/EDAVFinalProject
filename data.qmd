@@ -2,4 +2,75 @@
 
 ## Description
 
+For this project, we will use historical stock data for companies in three key sectors: Technology, Finance, and Healthcare. The dataset will span five years, allowing for a robust analysis of trends over time.
+
+### Sectors and Companies
+
+#### Technology:
+
+- Apple Inc. (AAPL)
+- Alphabet Inc. Class C (GOOG)
+- Meta Platforms Inc. Class A (META)
+- Microsoft Corp. (MSFT)
+- NVIDIA Corporation (NVDA)
+
+#### Finance:
+
+- Bank of America (BAC)
+- Goldman Sachs Group Inc. (GS)
+- JPMorgan Chase & Co. (JPM)
+- Morgan Stanley (MS)
+- Wells Fargo & Co. (WFC)
+
+#### Healthcare:
+
+- AstraZeneca (AZN)
+- Johnson & Johnson (JNJ)
+- Eli Lilly and Co. (LLY)
+- Merck & Co., Inc. (MRK)
+- Pfizer Inc. (PFE)
+
+### Data Source
+
+Nasdaq collects data through its exchange from transactions conducted by various market participants, including institutional investors, brokers, market makers, and retail traders. The data encompasses details on market activity such as trades, order books, bid/ask prices, volumes, and timestamped events.
+
+#### Transaction Data
+
+Each trade, quote, and order is logged, providing insights into the dynamics of stock movements, liquidity, and market trends.
+
+#### Participants
+
+Market participants, including broker-dealers and investors, generate real-time and historical data through their buying and selling activities.
+
+### Format and Frequency
+
+The data will be accessed in formats like CSV, JSON, or XML, which are compatible with analysis tools such as Python or R. The frequency of updates varies:
+
+- **Daily Data:** Updated at the end of each trading day.
+- **Intraday (Minute-Level) Data:** Real-time updates available during market hours.
+
+### Key Data Dimensions
+
+- **Date:** Trading date.  
+- **Open:** Opening stock price.  
+- **High:** Highest price during the trading day.  
+- **Low:** Lowest price during the trading day.  
+- **Close/Last:** Closing price or last trade price.  
+- **Volume:** Total shares traded.  
+
+### Potential Issues
+
+- **Data Gaps:** Missing data during market holidays or after-hours trading.
+- **Adjustments:** Stock splits and dividends may require corrections for consistency.  
+- **Data Volume:** Handling minute-level data over five years for multiple companies may require significant processing power and storage.  
+
+### Data Import Plan
+
+The data import strategy entails retrieving structured information from an API endpoint using HTTP requests that include appropriate headers to ensure successful communication. The JSON answer is processed and turned into a structured DataFrame, allowing for rapid data manipulation and analysis. Relevant data is then extracted and saved locally in a CSV file for further processing and analysis. This methodical methodology guarantees the smooth integration of raw data from an external source into a useful tabular format.
+
+### Sources
+
+Nasdaq's market data services will be the primary source, with potential supplementary data from financial APIs or publicly available CSV datasets.
+
+
 ## Missing value analysis
