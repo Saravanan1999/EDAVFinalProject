@@ -74,3 +74,101 @@ Nasdaq's market data services will be the primary source, with potential supplem
 
 
 ## Missing value analysis
+Reading data:
+```{r}
+BAC <- read.csv("C:\\Users\\PRAKASH\\Documents\\EDAVFinalProject\\Datasets\\Banking\\BAC Historical Data.csv")
+
+head(BAC)
+```
+
+```{r}
+GS <- read.csv("C:\\Users\\PRAKASH\\Documents\\EDAVFinalProject\\Datasets\\Banking\\GS Historical Data.csv")
+
+head(GS)
+```
+
+```{r}
+JPM <- read.csv("C:\\Users\\PRAKASH\\Documents\\EDAVFinalProject\\Datasets\\Banking\\JPM Historical Data.csv")
+
+head(JPM)
+```
+
+```{r}
+MS <- read.csv("C:\\Users\\PRAKASH\\Documents\\EDAVFinalProject\\Datasets\\Banking\\MS Historical Data.csv")
+
+head(MS)
+```
+
+```{r}
+WFC <- read.csv("C:\\Users\\PRAKASH\\Documents\\EDAVFinalProject\\Datasets\\Banking\\WFC Historical Data.csv")
+
+head(WFC)
+```
+
+Checking Null Values:
+
+```{r}
+print(colSums(is.na(BAC)))
+print(colSums(is.na(GS)))
+print(colSums(is.na(JPM)))
+print(colSums(is.na(MS)))
+print(colSums(is.na(WFC)))
+```
+Visualizing Missing Data:
+```{r}
+library(ggplot2)
+library(naniar)
+library(dplyr)
+library(tidyr)
+```
+
+```{r}
+# List of datasets
+data_list <- list(BAC = BAC, GS = GS, JPM = JPM, MS = MS, WFC = WFC)
+
+# Generate missing value visualizations
+for (name in names(data_list)) {
+  cat("Visualizing missing data for", name, "\n")
+  
+  # Plot
+  print(
+    vis_miss(data_list[[name]]) +
+      ggtitle(paste("Missing Data Visualization for", name))
+  )
+}
+
+```
+
+
+```{r}
+# List of datasets
+data_list <- list(BAC = BAC, GS = GS, JPM = JPM, MS = MS, WFC = WFC)
+
+# Combine all datasets into one data frame with a 'Dataset' column indicating the dataset name
+combined_data <- bind_rows(lapply(names(data_list), function(dataset_name) {
+  data <- data_list[[dataset_name]]
+  data$Dataset <- dataset_name
+  return(data)
+}))
+
+# Convert all columns to character type
+combined_data <- combined_data %>%
+  mutate(across(everything(), as.character))
+
+# Pivot longer and add a column for missing data
+combined_data_long <- combined_data %>%
+  pivot_longer(cols = -Dataset, names_to = "Column", values_to = "Value") %>%
+  mutate(Missing = is.na(Value))
+
+# Plot the missing data across datasets
+ggplot(combined_data_long, aes(x = Column, y = Dataset, fill = Missing)) +
+  geom_tile(color = "white") +
+  scale_fill_manual(values = c("TRUE" = "red", "FALSE" = "gray90")) +
+  theme_minimal() +
+  ggtitle("Missing Data Visualization Across Datasets") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
+
+```
+For the finance sector dataset, we have plotted 2 kinds of graphs:
+1. Missing value heatmap for each company: This plot shows that there is no missing for each company accross every column.
+2. 
