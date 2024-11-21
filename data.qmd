@@ -76,33 +76,24 @@ Nasdaq's market data services will be the primary source, with potential supplem
 ## Missing value analysis
 Reading data:
 ```{r}
-BAC <- read.csv("C:\\Users\\PRAKASH\\Documents\\EDAVFinalProject\\Datasets\\Banking\\BAC Historical Data.csv")
-
-head(BAC)
+BAC <- read.csv("./Datasets/Banking/BAC Historical Data.csv")
 ```
 
 ```{r}
-GS <- read.csv("C:\\Users\\PRAKASH\\Documents\\EDAVFinalProject\\Datasets\\Banking\\GS Historical Data.csv")
-
-head(GS)
+GS <- read.csv("./Datasets/Banking/GS Historical Data.csv")
 ```
 
 ```{r}
-JPM <- read.csv("C:\\Users\\PRAKASH\\Documents\\EDAVFinalProject\\Datasets\\Banking\\JPM Historical Data.csv")
-
-head(JPM)
+JPM <- read.csv("./Datasets/Banking/JPM Historical Data.csv")
 ```
 
 ```{r}
-MS <- read.csv("C:\\Users\\PRAKASH\\Documents\\EDAVFinalProject\\Datasets\\Banking\\MS Historical Data.csv")
+MS <- read.csv("./Datasets/Banking/MS Historical Data.csv")
 
-head(MS)
 ```
 
 ```{r}
-WFC <- read.csv("C:\\Users\\PRAKASH\\Documents\\EDAVFinalProject\\Datasets\\Banking\\WFC Historical Data.csv")
-
-head(WFC)
+WFC <- read.csv("./Datasets/Banking/WFC Historical Data.csv")
 ```
 
 Checking Null Values:
@@ -173,22 +164,17 @@ For the finance sector dataset, we have plotted 2 kinds of graphs:
 1. Missing value heatmap for each company: This plot shows that there is no missing for each company accross every column.
 2. 
 ```{r}
-aapl = read.csv("C:\\Users\\bavna\\OneDrive\\Documents\\EDAVFinalProject\\Datasets\\TECH\\AAPL Historical data.csv")
-head(aapl)
-goog = read.csv("C:\\Users\\bavna\\OneDrive\\Documents\\EDAVFinalProject\\Datasets\\TECH\\GOOG class C Historical data.csv")
-head(goog)
-meta = read.csv("C:\\Users\\bavna\\OneDrive\\Documents\\EDAVFinalProject\\Datasets\\TECH\\META CLASS A Historical data.csv")
-head(meta)
-msft = read.csv("C:\\Users\\bavna\\OneDrive\\Documents\\EDAVFinalProject\\Datasets\\TECH\\MSFT Historical data.csv")
-head(msft)
-nvda = read.csv("C:\\Users\\bavna\\OneDrive\\Documents\\EDAVFinalProject\\Datasets\\TECH\\NVDA historical data.csv")
-head(nvda)
+aapl = read.csv("./Datasets/TECH/AAPL Historical data.csv")
+goog = read.csv("./Datasets/TECH/GOOG class C Historical data.csv")
+meta = read.csv("./Datasets/TECH/META CLASS A Historical data.csv")
+msft = read.csv("./Datasets/TECH/MSFT Historical data.csv")
+nvda = read.csv("./Datasets/TECH/NVDA historical data.csv")
 #missing data
 print(colSums(is.na(aapl)))
 print(colSums(is.na(goog)))
 print(colSums(is.na(meta)))
 print(colSums(is.na(msft)))
-print(colSums(is.na(nvda)))
+print(colSums(is.na(nvda)))#
 #missing values visualisation
 #install.packages('naniar')
 #install.packages('VIM')
@@ -233,4 +219,4 @@ ggplot(missing_long, aes(x = Variable, y = Source, fill = Missing)) +
   ) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
-There are 2 of types visualizations we have done to depict the missing values in the data.One using regular ggplot and the other using the naniar package.As seen from the graphs, there are no missing values.This trend can be attributed to the fact that all stocks have a price and they are updated accordingly
+There are 2 of types visualizations we have done to depict the missing values in the data.One using regular ggplot and the other using the naniar package.As seen from the graphs, there are no missing values.This trend can be attributed to the fact that all stocks have a price and they are updated accordingly. To deal with historical data, NASDAQ would probably use multiple techniques like archival techniques and curation processes etc. Another widely known fact is that financial data is almost always very clean. 
