@@ -213,12 +213,12 @@ combined_data <- bind_rows(lapply(names(data_list), function(dataset_name) {
 }))
 
 # Convert all columns to character type
-combined_data <- combined_data %>%
+combined_data <- combined_data |>
   mutate(across(everything(), as.character))
 
 # Pivot longer and add a column for missing data
-combined_data_long <- combined_data %>%
-  pivot_longer(cols = -Dataset, names_to = "Column", values_to = "Value") %>%
+combined_data_long <- combined_data |>
+  pivot_longer(cols = -Dataset, names_to = "Column", values_to = "Value") |>
   mutate(Missing = is.na(Value))
 
 # Plot the missing data across datasets

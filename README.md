@@ -1,23 +1,9 @@
-### Render the book (RStudio)
+### Sector-based Financial Analysis
 
--   [ ] 1. If you haven't already, click "Help" "Check for Updates" to make sure you have the latest version of RStudio (and thus have Quarto installed.)
+In this project, we are making sector-wise analysis of various stocks. We are taking data from NASDAQ for Tech (Apple, Google, Microsoft, META, NVIDIA), Healthcare(Johnson and Johnson, AstraZeneca, Eli Lilly and Co., Merck & Co., Pfizer) and Banking (Bank of America, JP Morgan Chase, Goldman Sachs, Morgan Stanley and Wells Fargo) sectors. Our aim is to analyze the performance of the stocks within a sector and inter-sector. This would give us insights on why certain sectors have higher stock price rate. This would also help us gauge why some companies are under-performing compared to their peers.
 
--   [ ] 2. Render the web site locally by clicking the "Build" tap on the right and then "Render Book".
+Stock prices are not only determined by company's performance but also other factors such as economical, political and geographical trends. For example, market sentiment like greed, fear or optimism may play significant role in stock prices. Similarly, inflation, GDP and unemployment rate can also impact stock price. Higher interest rates can reduce consumer investment which may lead to low stock prices and company earnings. Each sector may respond differently to various factors. For example, the tech sector is heavily reliant on innovation and creativity while the energy sector is more sensitive to commodity price changes.
 
--   [ ] 3. Use `browseURL("docs/index.html")` to view your book locally (or just open `docs/index.html` in a browser).
-
--   [ ] 4. If it looks good, commit and push all changed files to GitHub.
-
-(You will need to repeat steps 2 and 4 every time you wish to update the book on GitHub Pages.)
-
-### Update README (GitHub or RStudio)
-
--   [ ] 1. Delete the content of this **README** and add a short description of your project in its place. If you're working locally, be sure to commit and push the changes to GitHub.
-
-### Optional
-
--   [ ] 1. Choose a theme from <https://bootswatch.com/> and replace "cosmo" in `_quarto.yml` with your prefered theme.
-
-### Additional features
-
-Please consult the official guide to **quarto** book websites: <https://quarto.org/docs/books/>
+In conclusion, the sector-wise stock analysis will provide deeper understanding of the factors that influence stock prices and provide relative strength or weakness of individual stocks within each sector which helpful in sector is leading. \
+\
+This project is part of the Exploratory Data Analysis/Visualization from team 25 (Jinal Prakash Devadiga (jpd2207), Saravanan Hari Baskaran(sh4621) and Bavna Rajan (br2794).
