@@ -8,27 +8,27 @@ For this project, we will use historical stock data for companies in three key s
 
 #### Technology:
 
-- Apple Inc. (AAPL)
-- Alphabet Inc. Class C (GOOG)
-- Meta Platforms Inc. Class A (META)
-- Microsoft Corp. (MSFT)
-- NVIDIA Corporation (NVDA)
+-   Apple Inc. (AAPL)
+-   Alphabet Inc. Class C (GOOG)
+-   Meta Platforms Inc. Class A (META)
+-   Microsoft Corp. (MSFT)
+-   NVIDIA Corporation (NVDA)
 
 #### Finance:
 
-- Bank of America (BAC)
-- Goldman Sachs Group Inc. (GS)
-- JPMorgan Chase & Co. (JPM)
-- Morgan Stanley (MS)
-- Wells Fargo & Co. (WFC)
+-   Bank of America (BAC)
+-   Goldman Sachs Group Inc. (GS)
+-   JPMorgan Chase & Co. (JPM)
+-   Morgan Stanley (MS)
+-   Wells Fargo & Co. (WFC)
 
 #### Healthcare:
 
-- AstraZeneca (AZN)
-- Johnson & Johnson (JNJ)
-- Eli Lilly and Co. (LLY)
-- Merck & Co., Inc. (MRK)
-- Pfizer Inc. (PFE)
+-   AstraZeneca (AZN)
+-   Johnson & Johnson (JNJ)
+-   Eli Lilly and Co. (LLY)
+-   Merck & Co., Inc. (MRK)
+-   Pfizer Inc. (PFE)
 
 ### Data Source
 
@@ -46,23 +46,23 @@ Market participants, including broker-dealers and investors, generate real-time 
 
 The data will be accessed in formats like CSV, JSON, or XML, which are compatible with analysis tools such as Python or R. The frequency of updates varies:
 
-- **Daily Data:** Updated at the end of each trading day.
-- **Intraday (Minute-Level) Data:** Real-time updates available during market hours.
+-   **Daily Data:** Updated at the end of each trading day.
+-   **Intraday (Minute-Level) Data:** Real-time updates available during market hours.
 
 ### Key Data Dimensions
 
-- **Date:** Trading date.  
-- **Open:** Opening stock price.  
-- **High:** Highest price during the trading day.  
-- **Low:** Lowest price during the trading day.  
-- **Close/Last:** Closing price or last trade price.  
-- **Volume:** Total shares traded.  
+-   **Date:** Trading date.\
+-   **Open:** Opening stock price.\
+-   **High:** Highest price during the trading day.\
+-   **Low:** Lowest price during the trading day.\
+-   **Close/Last:** Closing price or last trade price.\
+-   **Volume:** Total shares traded.
 
 ### Potential Issues
 
-- **Data Gaps:** Missing data during market holidays or after-hours trading.
-- **Adjustments:** Stock splits and dividends may require corrections for consistency.  
-- **Data Volume:** Handling minute-level data over five years for multiple companies may require significant processing power and storage.  
+-   **Data Gaps:** Missing data during market holidays or after-hours trading.
+-   **Adjustments:** Stock splits and dividends may require corrections for consistency.\
+-   **Data Volume:** Handling minute-level data over five years for multiple companies may require significant processing power and storage.
 
 ### Data Import Plan
 
@@ -72,43 +72,111 @@ The data import strategy entails retrieving structured information from an API e
 
 Nasdaq's market data services will be the primary source, with potential supplementary data from financial APIs or publicly available CSV datasets.
 
-
 ## Missing value analysis
+
+```{r}
+library(httr)
+library(jsonlite)
+library(readr)
+```
+
+Data fetching:
+
+```{r}
+
+fetch_and_save_data <- function(api_url, csv_path) {
+  response <- GET(api_url, add_headers("User-Agent" = "Mozilla/5.0"))
+  
+  if (status_code(response) == 200) {
+    json_content <- content(response, as = "text", encoding = "UTF-8")
+    parsed_data <- fromJSON(json_content, flatten = TRUE)
+    
+    historical_data <- parsed_data$data$tradesTable$rows
+    
+    data_frame <- as.data.frame(historical_data)
+    
+    write_csv(data_frame, csv_path)
+    
+    print(paste("Data successfully saved to", csv_path))
+  } else {
+    print(paste("Failed to fetch data. HTTP Status Code:", status_code(response)))
+  }
+}
+
+```
 
 ###Finance Sector
 
+Fetching data
+
+```{r}
+# bank
+BAC_history_data_url <- "https://api.nasdaq.com/api/quote/BAC/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=27"
+BAC_csv_path <- "./Datasets/Banking/BAC Historical Data.csv"
+fetch_and_save_data(BAC_history_data_url, BAC_csv_path)
+
+GS_history_data_url <- "https://api.nasdaq.com/api/quote/GS/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=26"
+GS_csv_path <- "./Datasets/Banking/GS Historical Data.csv"
+fetch_and_save_data(GS_history_data_url, GS_csv_path)
+
+JPM_history_data_url <- "https://api.nasdaq.com/api/quote/JPM/historical?assetclass=stocks&fromdate=2024-10-20&limit=9999&todate=2024-11-20&random=29"
+JPM_csv_path <- "./Datasets/Banking/JPM Historical Data.csv"
+fetch_and_save_data(JPM_history_data_url, JPM_csv_path)
+
+
+MS_history_data_url <- "https://api.nasdaq.com/api/quote/MS/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=15"
+MS_csv_path <- "./Datasets/Banking/MS Historical Data.csv"
+fetch_and_save_data(MS_history_data_url, MS_csv_path)
+
+
+WFC_history_data_url <- "https://api.nasdaq.com/api/quote/MS/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=15"
+WFC_csv_path <- "./Datasets/Banking/MS Historical Data.csv"
+fetch_and_save_data(WFC_history_data_url, WFC_csv_path)
+```
+
 Reading data:
+
 ```{r}
-BAC <- read.csv("./Datasets/Banking/BAC Historical Data.csv")
+BAC <- read.csv(BAC_csv_path)
 ```
 
 ```{r}
-GS <- read.csv("./Datasets/Banking/GS Historical Data.csv")
+GS <- read.csv(GS_csv_path)
 ```
 
 ```{r}
-JPM <- read.csv("./Datasets/Banking/JPM Historical Data.csv")
+JPM <- read.csv(JPM_csv_path)
 ```
 
 ```{r}
-MS <- read.csv("./Datasets/Banking/MS Historical Data.csv")
-
+MS <- read.csv(MS_csv_path)
 ```
 
 ```{r}
-WFC <- read.csv("./Datasets/Banking/WFC Historical Data.csv")
+WFC <- read.csv(WFC_csv_path)
 ```
 
 Checking Null Values:
 
 ```{r}
-print(colSums(is.na(BAC)))
-print(colSums(is.na(GS)))
-print(colSums(is.na(JPM)))
-print(colSums(is.na(MS)))
-print(colSums(is.na(WFC)))
+missing_values <- list(
+  "BAC" = colSums(is.na(BAC)),
+  "GS" = colSums(is.na(GS)),
+  "JPM" = colSums(is.na(JPM)),
+  "MS" = colSums(is.na(MS)),
+  "WFC" = colSums(is.na(WFC))
+)
+
+for (name in names(missing_values)) {
+  cat(paste("Missing values in", name, "dataset:\n"))
+  print(missing_values[[name]])
+  cat("\n")
+}
+
 ```
+
 Visualizing Missing Data:
+
 ```{r}
 library(ggplot2)
 library(naniar)
@@ -132,7 +200,6 @@ for (name in names(data_list)) {
 }
 
 ```
-
 
 ```{r}
 # List of datasets
@@ -166,23 +233,60 @@ ggplot(combined_data_long, aes(x = Column, y = Dataset, fill = Missing)) +
 
 For the finance sector dataset, we have plotted two types of graphs:
 
-A missing value heatmap for each company, which shows that there are no missing values across any column for each company.
-A comparative heatmap of the five companies in the finance sector, which confirms that none of the columns in any of the five datasets have missing values.
+A missing value heatmap for each company, which shows that there are no missing values across any column for each company. A comparative heatmap of the five companies in the finance sector, which confirms that none of the columns in any of the five datasets have missing values.
 
 ###Tech Sector
 
+Fetching data
+
 ```{r}
-aapl = read.csv("./Datasets/TECH/AAPL Historical data.csv")
-goog = read.csv("./Datasets/TECH/GOOG class C Historical data.csv")
-meta = read.csv("./Datasets/TECH/META CLASS A Historical data.csv")
-msft = read.csv("./Datasets/TECH/MSFT Historical data.csv")
-nvda = read.csv("./Datasets/TECH/NVDA historical data.csv")
+AAPL_history_data_url <- "https://api.nasdaq.com/api/quote/AAPL/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=21"
+AAPL_csv_path <- "./Datasets/TECH/AAPL Historical data.csv"
+fetch_and_save_data(AAPL_history_data_url, AAPL_csv_path)
+
+
+GOOG_history_data_url <- "https://api.nasdaq.com/api/quote/GOOG/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=32"
+GOOG_csv_path <- "./Datasets/TECH/GOOG class C Historical data.csv"
+fetch_and_save_data(GOOG_history_data_url, GOOG_csv_path)
+
+
+META_history_data_url <- "https://api.nasdaq.com/api/quote/META/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=13"
+META_csv_path <- "./Datasets/TECH/GOOG class C Historical data.csv"
+fetch_and_save_data(GOOG_history_data_url, GOOG_csv_path)
+
+
+MSFT_history_data_url <- "https://api.nasdaq.com/api/quote/META/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=13"
+MSFT_csv_path <- "./Datasets/TECH/MSFT Historical data.csv"
+fetch_and_save_data(MSFT_history_data_url, MSFT_csv_path)
+
+NVDA_history_data_url <- "https://api.nasdaq.com/api/quote/NVDA/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=49"
+NVDA_csv_path <- "./Datasets/TECH/NVDA historical data.csv"
+fetch_and_save_data(NVDA_history_data_url, NVDA_csv_path)
+```
+
+Reading data
+
+```{r}
+aapl = read.csv(AAPL_csv_path)
+goog = read.csv(GOOG_csv_path)
+meta = read.csv(META_csv_path)
+msft = read.csv(MSFT_csv_path)
+nvda = read.csv(NVDA_csv_path)
 #missing data
-print(colSums(is.na(aapl)))
-print(colSums(is.na(goog)))
-print(colSums(is.na(meta)))
-print(colSums(is.na(msft)))
-print(colSums(is.na(nvda)))#
+datasets <- list(
+  "AAPL" = aapl,
+  "GOOG" = goog,
+  "META" = meta,
+  "MSFT" = msft,
+  "NVDA" = nvda
+)
+
+for (name in names(datasets)) {
+  cat(paste("Missing values in", name, "dataset:\n"))
+  print(colSums(is.na(datasets[[name]])))
+  cat("\n")
+}
+
 #missing values visualisation
 #install.packages('naniar')
 #install.packages('VIM')
@@ -227,30 +331,68 @@ ggplot(missing_long, aes(x = Variable, y = Source, fill = Missing)) +
   ) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
-There are 2 of types visualizations we have done to depict the missing values in the data.One using regular ggplot and the other using the naniar package.As seen from the graphs, there are no missing values.This trend can be attributed to the fact that all stocks have a price and they are updated accordingly. To deal with historical data, NASDAQ would probably use multiple techniques like archival techniques and curation processes etc. Another widely known fact is that financial data is almost always very clean. 
+
+There are 2 of types visualizations we have done to depict the missing values in the data.One using regular ggplot and the other using the naniar package.As seen from the graphs, there are no missing values.This trend can be attributed to the fact that all stocks have a price and they are updated accordingly. To deal with historical data, NASDAQ would probably use multiple techniques like archival techniques and curation processes etc. Another widely known fact is that financial data is almost always very clean.
 
 ###Healthcare and Pharma Sector
 
+Fetch Data:
+
+```{r}
+JNJ_history_data_url <- "https://api.nasdaq.com/api/quote/JNJ/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=45"
+JNJ_csv_path <- "./Datasets/Healthcare and Pharma/JNJ Historical data.csv"
+fetch_and_save_data(JNJ_history_data_url, JNJ_csv_path)
+
+
+AZN_history_data_url <- "https://api.nasdaq.com/api/quote/AZN/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=20"
+AZN_csv_path <- "./Datasets/Healthcare and Pharma/AZN Historical data.csv"
+fetch_and_save_data(AZN_history_data_url, AZN_csv_path)
+
+
+LLY_history_data_url <- "https://api.nasdaq.com/api/quote/LLY/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=22"
+LLY_csv_path <- "./Datasets/Healthcare and Pharma/LLY Historical data.csv"
+fetch_and_save_data(LLY_history_data_url, LLY_csv_path)
+
+MRK_history_data_url <- "https://api.nasdaq.com/api/quote/MRK/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=33"
+MRK_csv_path <- "./Datasets/Healthcare and Pharma/MRK Historical data.csv"
+fetch_and_save_data(MRK_history_data_url, MRK_csv_path)
+
+PFE_history_data_url <- "https://api.nasdaq.com/api/quote/PFE/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=49"
+PFE_csv_path <- "./Datasets/Healthcare and Pharma/PFE Historical data.csv"
+fetch_and_save_data(PFE_history_data_url, PFE_csv_path)
+```
+
+Reading Data:
+
 ```{r}
 # Reading the datasets using relative paths
-jnj = read.csv("./Datasets/Healthcare and Pharma/JNJ Historical data.csv")
-azn = read.csv("./Datasets/Healthcare and Pharma/AZN Historical data.csv")
-lly = read.csv("./Datasets/Healthcare and Pharma/LLY Historical data.csv")
-mrk = read.csv("./Datasets/Healthcare and Pharma/MRK Historical data.csv")
-pfe = read.csv("./Datasets/Healthcare and Pharma/PFE Historical data.csv")
+jnj = read_csv(JNJ_csv_path)
+azn = read_csv(AZN_csv_path)
+lly = read_csv(LLY_csv_path)
+mrk = read_csv(MRK_csv_path)
+pfe = read_csv(PFE_csv_path)
 ```
 
 ```{r}
-# Missing data
-print(colSums(is.na(jnj)))
-print(colSums(is.na(azn)))
-print(colSums(is.na(lly)))
-print(colSums(is.na(mrk)))
-print(colSums(is.na(pfe)))
+pharma_datasets <- list(
+  "JNJ" = jnj,
+  "AZN" = azn,
+  "LLY" = lly,
+  "MRK" = mrk,
+  "PFE" = pfe
+)
+
+for (name in names(pharma_datasets)) {
+  cat(paste("Missing values in", name, "dataset:\n"))
+  print(colSums(is.na(pharma_datasets[[name]])))
+  cat("\n")
+}
+
 
 ```
 
 Missing Values Visualisation
+
 ```{r}
 # Assuming the files are named file1, file2, ..., file5
 jnj$Source <- "JNJ"
@@ -278,4 +420,7 @@ gg_miss_var(all_files_health, facet = Source) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(title = "Missing Data Visualization by File")
 ```
+
 We have used naniar package to visualise missing data. The x-axis shows the proportion of data missing in the dataset and here since its 0, it means there are no missing values. The reason why has been explained above.
+
+There are 3 of types visualizations we have done to depict the missing values in the data. Two using regular ggplot and the other using the naniar package. As seen from the graphs, there are no missing values.This trend can be attributed to the fact that all stocks have a price and they are updated accordingly. To deal with historical data, NASDAQ would probably use multiple techniques like archival techniques and curation processes etc. Another widely known fact is that financial data is almost always very clean.
