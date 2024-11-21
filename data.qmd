@@ -137,23 +137,23 @@ fetch_and_save_data(WFC_history_data_url, WFC_csv_path)
 Reading data:
 
 ```{r}
-BAC <- read.csv(BAC_csv_path)
+BAC <- read_csv(BAC_csv_path)
 ```
 
 ```{r}
-GS <- read.csv(GS_csv_path)
+GS <- read_csv(GS_csv_path)
 ```
 
 ```{r}
-JPM <- read.csv(JPM_csv_path)
+JPM <- read_csv(JPM_csv_path)
 ```
 
 ```{r}
-MS <- read.csv(MS_csv_path)
+MS <- read_csv(MS_csv_path)
 ```
 
 ```{r}
-WFC <- read.csv(WFC_csv_path)
+WFC <- read_csv(WFC_csv_path)
 ```
 
 Checking Null Values:
@@ -267,11 +267,11 @@ fetch_and_save_data(NVDA_history_data_url, NVDA_csv_path)
 Reading data
 
 ```{r}
-aapl = read.csv(AAPL_csv_path)
-goog = read.csv(GOOG_csv_path)
-meta = read.csv(META_csv_path)
-msft = read.csv(MSFT_csv_path)
-nvda = read.csv(NVDA_csv_path)
+aapl = read_csv(AAPL_csv_path)
+goog = read_csv(GOOG_csv_path)
+meta = read_csv(META_csv_path)
+msft = read_csv(MSFT_csv_path)
+nvda = read_csv(NVDA_csv_path)
 #missing data
 datasets <- list(
   "AAPL" = aapl,
