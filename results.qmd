@@ -130,3 +130,27 @@ p <- ggplot(all, aes(x = date, y = open, color = Stock)) +
 print(p)
 
 ```
+
+## Trade Volume
+
+```{r fig.height=12, fig.width=15}
+p <- ggplot(all, aes(x = date, y = volume, color = Stock)) +
+  geom_line(size = 1) +
+  facet_grid(Sector ~ ., scales = "free_y") +  # Facet rows by Sector
+  labs(
+    title = "Stock Trading Volume Faceted by Sector",
+    x = "Date",
+    y = "Volume",
+    color = "Stock"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+# Display the plot
+print(p)
+
+```
