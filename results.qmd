@@ -1,1 +1,132 @@
+---
+title: "Results"
+format: html
+---
+
 # Results
+
+## Executive Summary
+
+This section presents the key findings from our sector-based financial analysis of Technology, Healthcare, and Banking stocks listed on NASDAQ over the past five years. Our analysis reveals distinct performance patterns, risk profiles, and sensitivities to economic indicators across the sectors. Notably, the Technology sector demonstrated robust growth and resilience, while the Banking sector exhibited higher volatility influenced by interest rate fluctuations.
+
+## 1. Stock Performances on each sector
+
+### 1.1 Closing Price
+
+```{r fig.height=12, fig.width=15}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(tidyr)
+library(lubridate)
+library(zoo)  # for rollmean
+
+# List the CSV files for each sector
+banking_files <- list.files(path = "./Datasets/Banking/", pattern = "*.csv", full.names = TRUE)
+tech_files <- list.files(path = "./Datasets/TECH/", pattern = "*.csv", full.names = TRUE)
+health_files <- list.files(path = "./Datasets/Healthcare and Pharma/", pattern = "*.csv", full.names = TRUE)
+
+# Define the function to read and process data for a single file and sector
+read_sector_data <- function(file_path, sector) {
+  data <- read_csv(file_path, show_col_types = FALSE)  
+  
+  colnames(data) <- tolower(gsub("\\s+", "_", colnames(data)))  
+  
+  required_columns <- c("date", "close", "open", "high", "low")
+  missing_columns <- setdiff(required_columns, colnames(data))
+  if (length(missing_columns) > 0) {
+    stop(paste("Missing required columns in file:", file_path, 
+               "-> Missing columns:", paste(missing_columns, collapse = ", ")))
+  }
+  
+  data <- data %>%
+    mutate(
+      date = mdy(date),  
+      close = as.numeric(gsub("\\$", "", close)),  
+      open = as.numeric(gsub("\\$", "", open)),
+      high = as.numeric(gsub("\\$", "", high)),
+      low = as.numeric(gsub("\\$", "", low)),
+      volume = as.numeric(gsub(",", "", volume))  
+    ) %>%
+    mutate(
+      Sector = sector,
+      Source = tools::file_path_sans_ext(basename(file_path))
+    )
+  
+  return(data)
+}
+
+# Read and combine data for each sector
+banking_data <- bind_rows(lapply(banking_files, read_sector_data, sector = "Banking"))
+tech_data <- bind_rows(lapply(tech_files, read_sector_data, sector = "Technology"))
+health_data <- bind_rows(lapply(health_files, read_sector_data, sector = "Healthcare"))
+
+# Combine all sector data into one dataset
+combined_data <- bind_rows(banking_data, tech_data, health_data)
+
+# Rename 'Source' to 'Stock' before further processing
+combined_data <- combined_data %>%
+  rename(Stock = Source)
+
+# Create the 'all' dataset and compute additional metrics
+all <- combined_data %>%
+  mutate(
+    Sector = as.factor(Sector),
+    Stock = as.factor(Stock)
+  ) %>%
+  arrange(Stock, date) %>%
+  group_by(Stock) %>%
+  mutate(
+    daily_return = (close - lag(close)) / lag(close) * 100,
+    MA20 = rollmean(close, 20, fill = NA, align = "right"),
+    MA50 = rollmean(close, 50, fill = NA, align = "right")
+  ) %>%
+  ungroup() %>%
+  na.omit()
+
+# Create the faceted line chart with sectors arranged in rows
+p <- ggplot(all, aes(x = date, y = close, color = Stock)) +
+  geom_line(size = 1) +
+  facet_grid(Sector ~ ., scales = "free_y") +  # Arrange facets in rows
+  labs(
+    title = "Stock Closing Prices Faceted by Sector",
+    x = "Date",
+    y = "Closing Price (USD)",
+    color = "Stock"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+# Display the plot
+print(p)
+
+```
+
+## Opening Price
+
+```{r fig.height=12, fig.width=15}
+p <- ggplot(all, aes(x = date, y = open, color = Stock)) +
+  geom_line(size = 1) +
+  facet_grid(Sector ~ ., scales = "free_y") +  # Arrange facets in rows
+  labs(
+    title = "Stock Opening Prices Faceted by Sector",
+    x = "Date",
+    y = "Closing Price (USD)",
+    color = "Stock"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+# Display the plot
+print(p)
+
+```
