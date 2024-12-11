@@ -66,7 +66,7 @@ health_data <- bind_rows(lapply(health_files, read_sector_data, sector = "Health
 combined_data <- bind_rows(banking_data, tech_data, health_data)
 
 # Rename 'Source' to 'Stock' before further processing
-combined_data <- combined_data %>%
+combined_data <- combined_data |>
   rename(Stock = Source)
 
 # Create the 'all' dataset and compute additional metrics
@@ -82,7 +82,7 @@ all <- combined_data %>%
     MA20 = rollmean(close, 20, fill = NA, align = "right"),
     MA50 = rollmean(close, 50, fill = NA, align = "right")
   ) %>%
-  ungroup() %>%
+  ungroup() |>
   na.omit()
 
 # Create the faceted line chart with sectors arranged in rows
@@ -154,3 +154,11 @@ p <- ggplot(all, aes(x = date, y = volume, color = Stock)) +
 print(p)
 
 ```
+
+## 2. Stock Analysis By Sector
+
+### 2.1 Technology
+
+### 2.2 Healthcare
+
+### 2.1 Finance
