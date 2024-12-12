@@ -148,6 +148,7 @@ library(tidyr)
 library(lubridate)
 library(plotly)
 library(zoo)
+
 # Extract stock names from the Source column and pivot the data
 wide_data <- tech_data %>% 
   mutate(Stock = sub(" Historical data", "", Source)) %>% 
@@ -165,7 +166,8 @@ events <- data.frame(
                    "2022-02-24", "2023-10-07", "2024-11-05")),
   event = c("Notre-Dame Fire", "COVID-19 Declared", "Vaccine Rollout Begins", 
             "Capitol Riot", "Russia Invades Ukraine", "Israel-Hamas Conflict", 
-            "2024 Presidential Election")
+            "2024 Presidential Election"),
+  stringsAsFactors = FALSE
 )
 
 # Function to analyze stock performance around event dates
@@ -177,30 +179,21 @@ analyze_event_impact <- function(stock_data, event_date) {
   relevant_prices <- stock_data %>% 
     filter(date >= pre_event_date & date <= post_event_date)
   
-  stock_columns <- setdiff(names(relevant_prices), "Date")
+  stock_columns <- setdiff(names(relevant_prices), "date")
   
   returns <- relevant_prices %>% 
-    mutate(across(all_of(stock_columns), ~ (.x / lag(.x) - 1) * 100, .names = "{.col}_return"))
+    mutate(across(all_of(stock_columns), ~ (.x / lag(.x) - 1) * 100, .names = "{.col}_return")) %>%
+    # Add event date for reference
+    mutate(event_date = event_date)
   
   return(returns)
 }
 
-# Function to analyze stock performance around event dates
-analyze_event_impact <- function(stock_data, event_date) {
-  event_date <- as.Date(event_date)
-  pre_event_date <- event_date - days(3)
-  post_event_date <- event_date + days(3)
-  
-  relevant_prices <- stock_data %>% 
-    filter(Date >= pre_event_date & Date <= post_event_date)
-  
-  stock_columns <- setdiff(names(relevant_prices), "Date") # Exclude 'Date' from calculations
-  
-  returns <- relevant_prices %>% 
-    mutate(across(all_of(stock_columns), ~ (.x / lag(.x) - 1) * 100, .names = "{.col}_return"))
-  
-  return(returns)
-}
+# Apply the function to each event and combine the results
+impact_results <- events %>% 
+  rowwise() %>% 
+  do(analyze_event_impact(wide_data, .$date)) %>% 
+  ungroup()
 
 # Combine results into a single data frame for reporting
 results_df <- bind_rows(impact_results)
@@ -211,10 +204,12 @@ results_df <- results_df %>%
 
 # Prepare data for plotting
 plot_data <- results_df %>% 
-  pivot_longer(cols = ends_with("_return"), 
-               names_to = "Stock", 
-               values_to = "Return",
-               names_pattern = "(.+)_return") %>% 
+  pivot_longer(
+    cols = ends_with("_return"), 
+    names_to = "Stock", 
+    values_to = "Return",
+    names_pattern = "(.+)_return"
+  ) %>% 
   filter(!is.na(Return))
 
 # Create interactive plot using plotly
@@ -228,7 +223,7 @@ for (stock in stocks) {
   plot <- plot %>% add_trace(
     type = 'scatter',
     mode = 'lines+markers',
-    x = stock_data$Date,
+    x = stock_data$date,
     y = stock_data$Return,
     name = stock,
     legendgroup = stock,
@@ -247,12 +242,15 @@ for (i in seq_along(events$date)) {
 }
 
 # Customize layout
-plot %>% layout(
+plot <- plot %>% layout(
   title = "Stock Price Changes Around Major Events",
   xaxis = list(title = "Date"),
   yaxis = list(title = "Percentage Change (%)"),
   hovermode = "x unified"
 )
+
+# Display the plot
+plot
 ```
 ### 2.2 Healthcare
 ### 2.3 Finance
@@ -443,24 +441,24 @@ library(dplyr)
 health_data <- tech_data %>%
   group_by(Source) %>%
   arrange(date) %>%
-  mutate(daily_returns = (close / lag(close) - 1) * 100) %>%
+  mutate(daily_return = (close / lag(close) - 1) * 100) %>%
   ungroup()
 
 # Calculate volatility (20-day rolling standard deviation of returns)
 health_data <- tech_data %>%
   group_by(Source) %>%
-  mutate(volatility = slide_dbl(daily_returns, sd, .before = 19, .complete = TRUE)) %>%
+  mutate(volatility = slide_dbl(daily_return, sd, .before = 19, .complete = TRUE)) %>%
   ungroup()
 
 # Calculate average returns
 avg_returns <- health_data %>%
   group_by(Source) %>%
-  summarize(avg_daily_return = mean(daily_returns, na.rm = TRUE)) %>%
+  summarize(avg_daily_return = mean(daily_return, na.rm = TRUE)) %>%
   arrange(desc(avg_daily_return))
 
 print(avg_returns)
 
-tech_data_clean <- tech_data %>% filter(!is.na(daily_returns))
+tech_data_clean <- tech_data %>% filter(!is.na(daily_return))
 
 # Plot daily returns
 ggplot(tech_data_clean, aes(x = date, y = daily_return, color = Source)) +
