@@ -1014,7 +1014,6 @@ walk2(sectors, results, function(sector, sector_result) {
   })
 })
 
-
 ```
 
 #### 4.2 Finance
@@ -1047,7 +1046,6 @@ walk2(sectors, results, function(sector, sector_result) {
 #### 4.3 Technology
 
 ```{r}
-
 # Load necessary libraries
 library(tidyverse)
 library(lubridate)

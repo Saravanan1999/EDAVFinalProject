@@ -111,27 +111,27 @@ Fetching data
 
 ```{r}
 # bank
-BAC_history_data_url <- "https://api.nasdaq.com/api/quote/BAC/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=27"
-BAC_csv_path <- "./Datasets/Banking/BAC Historical Data.csv"
-fetch_and_save_data(BAC_history_data_url, BAC_csv_path)
+#BAC_history_data_url <- "https://api.nasdaq.com/api/quote/BAC/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=27"
+#BAC_csv_path <- "./Datasets/Banking/BAC Historical Data.csv"
+#fetch_and_save_data(BAC_history_data_url, BAC_csv_path)
 
-GS_history_data_url <- "https://api.nasdaq.com/api/quote/GS/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=26"
-GS_csv_path <- "./Datasets/Banking/GS Historical Data.csv"
-fetch_and_save_data(GS_history_data_url, GS_csv_path)
+# GS_history_data_url <- "https://api.nasdaq.com/api/quote/GS/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=26"
+#GS_csv_path <- "./Datasets/Banking/GS Historical Data.csv"
+# fetch_and_save_data(GS_history_data_url, GS_csv_path)
 
-JPM_history_data_url <- "https://api.nasdaq.com/api/quote/JPM/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=29"
-JPM_csv_path <- "./Datasets/Banking/JPM Historical Data.csv"
-fetch_and_save_data(JPM_history_data_url, JPM_csv_path)
-
-
-MS_history_data_url <- "https://api.nasdaq.com/api/quote/MS/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=15"
-MS_csv_path <- "./Datasets/Banking/MS Historical Data.csv"
-fetch_and_save_data(MS_history_data_url, MS_csv_path)
+# JPM_history_data_url <- "https://api.nasdaq.com/api/quote/JPM/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=29"
+#JPM_csv_path <- "./Datasets/Banking/JPM Historical Data.csv"
+# fetch_and_save_data(JPM_history_data_url, JPM_csv_path)
 
 
-WFC_history_data_url <- "https://api.nasdaq.com/api/quote/MS/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=15"
-WFC_csv_path <- "./Datasets/Banking/MS Historical Data.csv"
-fetch_and_save_data(WFC_history_data_url, WFC_csv_path)
+# MS_history_data_url <- "https://api.nasdaq.com/api/quote/MS/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=15"
+#MS_csv_path <- "./Datasets/Banking/MS Historical Data.csv"
+# fetch_and_save_data(MS_history_data_url, MS_csv_path)
+
+
+# WFC_history_data_url <- "https://api.nasdaq.com/api/quote/MS/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=15"
+#WFC_csv_path <- "./Datasets/Banking/MS Historical Data.csv"
+# fetch_and_save_data(WFC_history_data_url, WFC_csv_path)
 ```
 
 Reading data:
@@ -240,29 +240,28 @@ A missing value heatmap for each company, which shows that there are no missing 
 Fetching data
 
 ```{r}
-AAPL_history_data_url <- "https://api.nasdaq.com/api/quote/AAPL/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=21"
-AAPL_csv_path <- "./Datasets/TECH/AAPL Historical data.csv"
-fetch_and_save_data(AAPL_history_data_url, AAPL_csv_path)
+#AAPL_history_data_url <- "https://api.nasdaq.com/api/quote/AAPL/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=21"
+#AAPL_csv_path <- "./Datasets/TECH/AAPL Historical data.csv"
+#fetch_and_save_data(AAPL_history_data_url, AAPL_csv_path)
 
 
-GOOG_history_data_url <- "https://api.nasdaq.com/api/quote/GOOG/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=32"
-GOOG_csv_path <- "./Datasets/TECH/GOOG class C Historical data.csv"
-fetch_and_save_data(GOOG_history_data_url, GOOG_csv_path)
+#GOOG_history_data_url <- "https://api.nasdaq.com/api/quote/GOOG/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=32"
+#GOOG_csv_path <- "./Datasets/TECH/GOOG class C Historical data.csv"
+#fetch_and_save_data(GOOG_history_data_url, GOOG_csv_path)
 
+# META_history_data_url <- "https://api.nasdaq.com/api/quote/META/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=13"
+# META_csv_path <- "./Datasets/TECH/GOOG class C Historical data.csv"
+# fetch_and_save_data(GOOG_history_data_url, GOOG_csv_path)
+ 
 
-META_history_data_url <- "https://api.nasdaq.com/api/quote/META/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=13"
-META_csv_path <- "./Datasets/TECH/GOOG class C Historical data.csv"
-fetch_and_save_data(GOOG_history_data_url, GOOG_csv_path)
+# MSFT_history_data_url <- "https://api.nasdaq.com/api/quote/META/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=13"
+# MSFT_csv_path <- "./Datasets/TECH/MSFT Historical data.csv"
+# fetch_and_save_data(MSFT_history_data_url, MSFT_csv_path)
 
-
-MSFT_history_data_url <- "https://api.nasdaq.com/api/quote/META/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=13"
-MSFT_csv_path <- "./Datasets/TECH/MSFT Historical data.csv"
-fetch_and_save_data(MSFT_history_data_url, MSFT_csv_path)
-
-NVDA_history_data_url <- "https://api.nasdaq.com/api/quote/NVDA/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=49"
-NVDA_csv_path <- "./Datasets/TECH/NVDA historical data.csv"
-fetch_and_save_data(NVDA_history_data_url, NVDA_csv_path)
-```
+# NVDA_history_data_url <- "https://api.nasdaq.com/api/quote/NVDA/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=49"
+# NVDA_csv_path <- "./Datasets/TECH/NVDA historical data.csv"
+# fetch_and_save_data(NVDA_history_data_url, NVDA_csv_path)
+ ```
 
 Reading data
 
@@ -339,27 +338,27 @@ There are 2 of types visualizations we have done to depict the missing values in
 Fetch Data:
 
 ```{r}
-JNJ_history_data_url <- "https://api.nasdaq.com/api/quote/JNJ/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=45"
-JNJ_csv_path <- "./Datasets/Healthcare and Pharma/JNJ Historical data.csv"
-fetch_and_save_data(JNJ_history_data_url, JNJ_csv_path)
-
-
-AZN_history_data_url <- "https://api.nasdaq.com/api/quote/AZN/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=20"
-AZN_csv_path <- "./Datasets/Healthcare and Pharma/AZN Historical data.csv"
-fetch_and_save_data(AZN_history_data_url, AZN_csv_path)
-
-
-LLY_history_data_url <- "https://api.nasdaq.com/api/quote/LLY/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=22"
-LLY_csv_path <- "./Datasets/Healthcare and Pharma/LLY Historical data.csv"
-fetch_and_save_data(LLY_history_data_url, LLY_csv_path)
-
-MRK_history_data_url <- "https://api.nasdaq.com/api/quote/MRK/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=33"
-MRK_csv_path <- "./Datasets/Healthcare and Pharma/MRK Historical data.csv"
-fetch_and_save_data(MRK_history_data_url, MRK_csv_path)
-
-PFE_history_data_url <- "https://api.nasdaq.com/api/quote/PFE/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=49"
-PFE_csv_path <- "./Datasets/Healthcare and Pharma/PFE Historical data.csv"
-fetch_and_save_data(PFE_history_data_url, PFE_csv_path)
+# JNJ_history_data_url <- "https://api.nasdaq.com/api/quote/JNJ/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=45"
+# JNJ_csv_path <- "./Datasets/Healthcare and Pharma/JNJ Historical data.csv"
+# fetch_and_save_data(JNJ_history_data_url, JNJ_csv_path)
+# 
+# 
+# AZN_history_data_url <- "https://api.nasdaq.com/api/quote/AZN/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=20"
+# AZN_csv_path <- "./Datasets/Healthcare and Pharma/AZN Historical data.csv"
+# fetch_and_save_data(AZN_history_data_url, AZN_csv_path)
+# 
+# 
+# LLY_history_data_url <- "https://api.nasdaq.com/api/quote/LLY/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=22"
+# LLY_csv_path <- "./Datasets/Healthcare and Pharma/LLY Historical data.csv"
+# fetch_and_save_data(LLY_history_data_url, LLY_csv_path)
+# 
+# MRK_history_data_url <- "https://api.nasdaq.com/api/quote/MRK/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=33"
+# MRK_csv_path <- "./Datasets/Healthcare and Pharma/MRK Historical data.csv"
+# fetch_and_save_data(MRK_history_data_url, MRK_csv_path)
+# 
+# PFE_history_data_url <- "https://api.nasdaq.com/api/quote/PFE/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=49"
+# PFE_csv_path <- "./Datasets/Healthcare and Pharma/PFE Historical data.csv"
+# fetch_and_save_data(PFE_history_data_url, PFE_csv_path)
 ```
 
 Reading Data:
