@@ -262,6 +262,7 @@ plot
 ```{r}
 # Install and load required packages
 # Install and load required packages
+#install.packages("slider")
 library(slider)
 library(ggplot2)
 library(dplyr)
@@ -438,30 +439,30 @@ library(ggplot2)
 library(dplyr)
 
 # Calculate daily returns
-health_data <- tech_data %>%
+tech_data <- tech_data %>%
   group_by(Source) %>%
   arrange(date) %>%
-  mutate(daily_return = (close / lag(close) - 1) * 100) %>%
+  mutate(daily_returns = (close / lag(close) - 1) * 100) %>%
   ungroup()
 
 # Calculate volatility (20-day rolling standard deviation of returns)
-health_data <- tech_data %>%
+tech_data <- tech_data %>%
   group_by(Source) %>%
-  mutate(volatility = slide_dbl(daily_return, sd, .before = 19, .complete = TRUE)) %>%
+  mutate(volatility = slide_dbl(daily_returns, sd, .before = 19, .complete = TRUE)) %>%
   ungroup()
 
 # Calculate average returns
-avg_returns <- health_data %>%
+avg_returns <- tech_data %>%
   group_by(Source) %>%
-  summarize(avg_daily_return = mean(daily_return, na.rm = TRUE)) %>%
+  summarize(avg_daily_return = mean(daily_returns, na.rm = TRUE)) %>%
   arrange(desc(avg_daily_return))
 
 print(avg_returns)
 
-tech_data_clean <- tech_data %>% filter(!is.na(daily_return))
+tech_data_clean <- tech_data %>% filter(!is.na(daily_returns))
 
 # Plot daily returns
-ggplot(tech_data_clean, aes(x = date, y = daily_return, color = Source)) +
+ggplot(tech_data_clean, aes(x = date, y = daily_returns, color = Source)) +
   geom_line() +
   labs(title = "Daily Returns by Stock", x = "Date", y = "Daily Return (%)") +
   theme_minimal()
