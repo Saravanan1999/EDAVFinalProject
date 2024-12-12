@@ -119,7 +119,7 @@ GS_history_data_url <- "https://api.nasdaq.com/api/quote/GS/historical?assetclas
 GS_csv_path <- "./Datasets/Banking/GS Historical Data.csv"
 fetch_and_save_data(GS_history_data_url, GS_csv_path)
 
-JPM_history_data_url <- "https://api.nasdaq.com/api/quote/JPM/historical?assetclass=stocks&fromdate=2024-10-20&limit=9999&todate=2024-11-20&random=29"
+JPM_history_data_url <- "https://api.nasdaq.com/api/quote/JPM/historical?assetclass=stocks&fromdate=2019-11-20&limit=9999&todate=2024-11-20&random=29"
 JPM_csv_path <- "./Datasets/Banking/JPM Historical Data.csv"
 fetch_and_save_data(JPM_history_data_url, JPM_csv_path)
 

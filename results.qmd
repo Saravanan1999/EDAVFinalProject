@@ -141,7 +141,7 @@ print(p)
 
 ## 2. Stock Analysis By Events
 
-### 2.1 Technology
+### 2.1 Healthcare
 
 ```{r}
 library(dplyr)
@@ -151,7 +151,7 @@ library(plotly)
 library(zoo)
 
 # Extract stock names from the Source column and pivot the data
-wide_data <- tech_data |> 
+wide_data <- health_data |> 
   mutate(Stock = sub(" Historical data", "", Source)) |> 
   select(date, close, Stock) |> 
   pivot_wider(names_from = Stock, values_from = close) |> 
@@ -189,6 +189,164 @@ analyze_event_impact <- function(stock_data, event_date) {
   
   return(returns)
 }
+
+# Apply the function to each event and combine the results
+impact_results <- events |> 
+  rowwise() |> 
+  do(analyze_event_impact(wide_data, .$date)) |> 
+  ungroup()
+
+# Combine results into a single data frame for reporting
+results_df <- bind_rows(impact_results)
+
+# Remove rows with all NA values in return columns
+results_df <- results_df |> 
+  filter(if_any(ends_with("_return"), ~ !is.na(.)))
+
+# Prepare data for plotting
+plot_data <- results_df |> 
+  pivot_longer(
+    cols = ends_with("_return"), 
+    names_to = "Stock", 
+    values_to = "Return",
+    names_pattern = "(.+)_return"
+  ) |> 
+  filter(!is.na(Return))
+
+# Create interactive plot using plotly
+plot <- plot_ly()
+
+# Add a trace for each stock
+stocks <- unique(plot_data$Stock) # Get unique stock names from plot_data
+for (stock in stocks) {
+  stock_data <- plot_data |> filter(Stock == stock)
+  
+  plot <- plot |> add_trace(
+    type = 'scatter',
+    mode = 'lines+markers',
+    x = stock_data$date,
+    y = stock_data$Return,
+    name = stock,
+    legendgroup = stock,
+    visible = 'legendonly' # Start with traces hidden
+  )
+}
+
+print(stocks)
+
+# Add vertical lines for events
+for (i in seq_along(events$date)) {
+  plot <- plot |> add_segments(
+    x = events$date[i], xend = events$date[i],
+    y = min(plot_data$Return, na.rm = TRUE), yend = max(plot_data$Return, na.rm = TRUE),
+    line = list(color = 'red', dash='dash'),
+    showlegend = FALSE
+  )
+}
+
+# Customize layout
+plot <- plot |> layout(
+  title = "Stock Price Changes Around Major Events",
+  xaxis = list(title = "Date"),
+  yaxis = list(title = "Percentage Change (%)"),
+  hovermode = "x unified"
+)
+
+# Display the plot
+plot
+```
+
+### 2.2 Finance
+
+```{r}
+wide_data <- banking_data |> 
+  mutate(Stock = sub(" Historical data", "", Source)) |> 
+  select(date, close, Stock) |> 
+  pivot_wider(names_from = Stock, values_from = close) |> 
+  arrange(date)
+
+# Fill missing values using linear interpolation
+wide_data <- wide_data |> 
+  mutate(across(-date, ~ na.approx(.x, na.rm = FALSE)))
+
+# Apply the function to each event and combine the results
+impact_results <- events |> 
+  rowwise() |> 
+  do(analyze_event_impact(wide_data, .$date)) |> 
+  ungroup()
+
+# Combine results into a single data frame for reporting
+results_df <- bind_rows(impact_results)
+
+# Remove rows with all NA values in return columns
+results_df <- results_df |> 
+  filter(if_any(ends_with("_return"), ~ !is.na(.)))
+
+# Prepare data for plotting
+plot_data <- results_df |> 
+  pivot_longer(
+    cols = ends_with("_return"), 
+    names_to = "Stock", 
+    values_to = "Return",
+    names_pattern = "(.+)_return"
+  ) |> 
+  filter(!is.na(Return))
+
+# Create interactive plot using plotly
+plot <- plot_ly()
+
+# Add a trace for each stock
+stocks <- unique(plot_data$Stock) # Get unique stock names from plot_data
+for (stock in stocks) {
+  stock_data <- plot_data |> filter(Stock == stock)
+  
+  plot <- plot |> add_trace(
+    type = 'scatter',
+    mode = 'lines+markers',
+    x = stock_data$date,
+    y = stock_data$Return,
+    name = stock,
+    legendgroup = stock,
+    visible = 'legendonly' # Start with traces hidden
+  )
+}
+
+# Add vertical lines for events
+for (i in seq_along(events$date)) {
+  plot <- plot |> add_segments(
+    x = events$date[i], xend = events$date[i],
+    y = min(plot_data$Return, na.rm = TRUE), yend = max(plot_data$Return, na.rm = TRUE),
+    line = list(color = 'red', dash='dash'),
+    showlegend = FALSE
+  )
+}
+
+# Customize layout
+plot <- plot |> layout(
+  title = "Stock Price Changes Around Major Events",
+  xaxis = list(title = "Date"),
+  yaxis = list(title = "Percentage Change (%)"),
+  hovermode = "x unified"
+)
+
+# Display the plot
+plot
+```
+
+### 2.3 Technology
+
+```{r}
+
+# Extract stock names from the Source column and pivot the data
+wide_data <- tech_data |> 
+  mutate(Stock = sub(" Historical data", "", Source)) |> 
+  select(date, close, Stock) |> 
+  pivot_wider(names_from = Stock, values_from = close) |> 
+  arrange(date)
+
+# Fill missing values using linear interpolation
+wide_data <- wide_data |> 
+  mutate(across(-date, ~ na.approx(.x, na.rm = FALSE)))
 
 # Apply the function to each event and combine the results
 impact_results <- events |> 
