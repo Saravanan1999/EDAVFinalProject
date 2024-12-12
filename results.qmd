@@ -69,22 +69,6 @@ combined_data <- bind_rows(banking_data, tech_data, health_data)
 combined_data <- combined_data |>
   rename(Stock = Source)
 
-# Create the 'all' dataset and compute additional metrics
-all <- combined_data %>%
-  mutate(
-    Sector = as.factor(Sector),
-    Stock = as.factor(Stock)
-  ) %>%
-  arrange(Stock, date) %>%
-  group_by(Stock) %>%
-  mutate(
-    daily_return = (close - lag(close)) / lag(close) * 100,
-    MA20 = rollmean(close, 20, fill = NA, align = "right"),
-    MA50 = rollmean(close, 50, fill = NA, align = "right")
-  ) %>%
-  ungroup() |>
-  na.omit()
-
 # Create the faceted line chart with sectors arranged in rows
 p <- ggplot(all, aes(x = date, y = close, color = Stock)) +
   geom_line(size = 1) +
@@ -265,5 +249,177 @@ plot %>% layout(
 
 ```
 ### 2.2 Healthcare
+
+```{r}
+# Install and load required packages
+# Install and load required packages
+library(slider)
+library(ggplot2)
+library(dplyr)
+
+# Calculate daily returns
+health_data <- health_data %>%
+  group_by(Source) %>%
+  arrange(date) %>%
+  mutate(daily_return = (close / lag(close) - 1) * 100) %>%
+  ungroup()
+
+# Calculate volatility (20-day rolling standard deviation of returns)
+health_data <- health_data %>%
+  group_by(Source) %>%
+  mutate(volatility = slide_dbl(daily_return, sd, .before = 19, .complete = TRUE)) %>%
+  ungroup()
+
+# Calculate average returns
+avg_returns <- health_data %>%
+  group_by(Source) %>%
+  summarize(avg_daily_return = mean(daily_return, na.rm = TRUE)) %>%
+  arrange(desc(avg_daily_return))
+
+print(avg_returns)
+
+health_data_clean <- health_data %>% filter(!is.na(daily_return))
+
+# Plot daily returns
+ggplot(health_data_clean, aes(x = date, y = daily_return, color = Source)) +
+  geom_line() +
+  labs(title = "Daily Returns by Stock", x = "Date", y = "Daily Return (%)") +
+  theme_minimal()
+
+```
+
+```{r}
+# Plot volatility
+health_data_clean <- health_data %>% filter(!is.na(volatility))
+ggplot(health_data_clean, aes(x = date, y = volatility, color = Source)) +
+  geom_line() +
+  labs(title = "Volatility (20-Day Rolling Standard Deviation) by Stock", x = "Date", y = "Volatility (%)") +
+  theme_minimal()
+```
+
+```{r}
+library(TTR)
+
+health_data <- health_data |>
+  group_by(Source) |>
+  mutate(RSI = TTR::RSI(close, n = 14)) |>
+  ungroup()
+
+health_data <- health_data %>% filter(!is.na(RSI))
+
+create_rsi_plot <- function(data, stock_name) {
+  stock_data <- data %>% filter(Source == stock_name)
+  
+  ggplot(stock_data, aes(x = date)) +
+    geom_rect(aes(xmin = min(date), xmax = max(date), ymin = 70, ymax = 100), 
+              fill = "pink", alpha = 0.2) +
+    geom_rect(aes(xmin = min(date), xmax = max(date), ymin = 0, ymax = 30), 
+              fill = "lightgreen", alpha = 0.2) +
+    geom_line(aes(y = RSI), color = "black", linewidth = 0.8) +
+    geom_hline(yintercept = 70, color = "red", linetype = "dashed", linewidth = 0.8) +
+    geom_hline(yintercept = 30, color = "green", linetype = "dashed", linewidth = 0.8) +
+    geom_hline(yintercept = 50, color = "gray", linetype = "dotted") +
+    labs(title = paste("RSI Over Time -", stock_name), 
+         subtitle = "With Overbought (>70) and Oversold (<30) Zones",
+         x = "Date", 
+         y = "RSI") +
+    scale_y_continuous(limits = c(0, 100)) +
+    theme_minimal() +
+    theme(
+      panel.grid.minor = element_blank(),
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      plot.title = element_text(face = "bold"),
+      plot.subtitle = element_text(size = 9)
+    )
+}
+
+# Create plots for each stock
+stock_names <- unique(health_data$Source)
+for(stock in stock_names) {
+  print(create_rsi_plot(health_data, stock))
+}
+
+
+```
+
+```{r fig.height=20 fig.width=15}
+library(gridExtra)
+library(grid)
+performance_metrics <- health_data %>%
+  group_by(Source) %>%
+  summarize(
+    sharpe_ratio = mean(daily_return, na.rm = TRUE) / 
+                  sd(daily_return, na.rm = TRUE) * sqrt(252),
+    max_drawdown = min(cumsum(daily_return), na.rm = TRUE),
+    avg_volatility = mean(volatility, na.rm = TRUE)
+  ) %>%
+  arrange(desc(sharpe_ratio))
+
+print(performance_metrics)
+
+# Calculate rolling metrics
+health_data <- health_data %>%
+  group_by(Source) %>%
+  arrange(date) %>%
+  mutate(
+    # Rolling Sharpe Ratio (252-day window)
+    rolling_returns_mean = zoo::rollmean(daily_return, k = 252, fill = NA),
+    rolling_returns_sd = zoo::rollapply(daily_return, width = 252, FUN = sd, fill = NA),
+    rolling_sharpe = (rolling_returns_mean / rolling_returns_sd) * sqrt(252),
+    
+    # Rolling Maximum Drawdown
+    cumulative_return = cumprod(1 + daily_return),
+    rolling_max = zoo::rollmax(cumulative_return, k = 252, fill = NA),
+    rolling_drawdown = (cumulative_return - rolling_max) / rolling_max
+  ) %>%
+  ungroup()
+
+health_data <- health_data %>% filter(!is.na(rolling_sharpe))
+health_data <- health_data %>% filter(!is.na(rolling_drawdown))
+
+
+# Create rolling Sharpe ratio plot
+sharpe_plot <- ggplot(health_data, aes(x = date, y = rolling_sharpe, color = Source)) +
+  geom_line() +
+  labs(title = "Rolling Sharpe Ratio Over Time (252-day window)",
+       x = "Date", y = "Sharpe Ratio") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+# Arrange plots vertically
+ggplot(health_data, aes(x = date, y = rolling_sharpe, color = Source)) +
+  geom_line() +
+  labs(title = "Rolling Sharpe Ratio Over Time",
+       x = "Date", y = "Sharpe Ratio") +
+  theme_minimal() +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(face = "bold")
+  )
+
+
+```
+
+```{r fig.height=12 fig.width=20}
+# Create rolling maximum drawdown plot
+drawdown_plot <- ggplot(health_data, aes(x = date, y = rolling_drawdown, color = Source)) +
+  geom_line() +
+  labs(title = "Rolling Maximum Drawdown Over Time (252-day window)",
+       x = "Date", y = "Drawdown") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+ggplot(health_data, aes(x = date, y = rolling_drawdown)) +
+  geom_line() +
+  labs(title = "Rolling Maximum Drawdown Over Time",
+       x = "Date", y = "Drawdown") +
+  theme_minimal() +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(face = "bold")
+  ) +
+  facet_wrap(~ Source)
+```
 
 ### 2.3 Finance
