@@ -934,10 +934,12 @@ ggplot(tech_data, aes(x = date, y = rolling_drawdown)) +
   facet_wrap(~ Source)
 ```
 
-### Seasonal Patterns and Cycles
+### 4 Seasonal Patterns and Cycles
 
-#### Healthcare
+#### 4.1. Healthcare
+
 ```{r}
+library(purrr)
 # Clean and prepare the data
 stocks_data <- health_data %>%
   filter(!is.na(date) & !is.na(close)) %>%  # Remove rows with missing Date or Price
@@ -1015,17 +1017,9 @@ walk2(sectors, results, function(sector, sector_result) {
 
 ```
 
-
-#### Finance
+#### 4.2 Finance
 
 ```{r}
-
-# Load necessary libraries
-library(tidyverse)
-library(lubridate)
-library(forecast)
-library(ggplot2)
-library(tseries)
 
 
 # Clean and prepare the data
@@ -1050,7 +1044,8 @@ walk2(sectors, results, function(sector, sector_result) {
 
 ```
 
-#### Technology
+#### 4.3 Technology
+
 ```{r}
 
 # Load necessary libraries
