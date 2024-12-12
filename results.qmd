@@ -13,7 +13,7 @@ This section presents the key findings from our sector-based financial analysis 
 
 ### 1.1 Closing Price
 
-```{r fig.height=12, fig.width=15}
+```{r}
 # Load necessary libraries
 library(ggplot2)
 library(dplyr)
@@ -24,8 +24,18 @@ library(zoo)  # for rollmean
 
 # List the CSV files for each sector
 banking_files <- list.files(path = "./Datasets/Banking/", pattern = "*.csv", full.names = TRUE)
+banking_files <- banking_files[!grepl("_modified", banking_files)]
+
 tech_files <- list.files(path = "./Datasets/TECH/", pattern = "*.csv", full.names = TRUE)
+tech_files <- tech_files[!grepl("_modified", tech_files)]
+
 health_files <- list.files(path = "./Datasets/Healthcare and Pharma/", pattern = "*.csv", full.names = TRUE)
+health_files <- health_files[!grepl("_modified", health_files)]
+
+save_to_csv <- function(data, file_path) {
+  write_csv(data, file_path)
+}
+stock_file_mapping <- list()
 
 # Define the function to read and process data for a single file and sector
 read_sector_data <- function(file_path, sector) {
@@ -53,6 +63,8 @@ read_sector_data <- function(file_path, sector) {
       Sector = sector,
       Source = tools::file_path_sans_ext(basename(file_path))
     )
+  
+  stock_file_mapping[[unique(data$Source)]] <<- file_path
   
   return(data)
 }
@@ -89,11 +101,12 @@ p <- ggplot(combined_data, aes(x = date, y = close, color = Stock)) +
 # Display the plot
 print(p)
 
+print(banking_files)
 ```
 
 ## Opening Price
 
-```{r fig.height=12, fig.width=15}
+```{r}
 p <- ggplot(combined_data, aes(x = date, y = open, color = Stock)) +
   geom_line(size = 1) +
   facet_grid(Sector ~ ., scales = "free_y") +  # Arrange facets in rows
@@ -117,7 +130,7 @@ print(p)
 
 ## Trade Volume
 
-```{r fig.height=12, fig.width=15}
+```{r}
 p <- ggplot(combined_data, aes(x = date, y = volume, color = Stock)) +
   geom_line(size = 1) +
   facet_grid(Sector ~ ., scales = "free_y") +  # Facet rows by Sector
@@ -509,7 +522,7 @@ for(stock in stock_names) {
 
 ```
 
-```{r fig.height=20 fig.width=15}
+```{r}
 library(gridExtra)
 library(grid)
 performance_metrics <- health_data |>
@@ -567,7 +580,7 @@ ggplot(health_data, aes(x = date, y = rolling_sharpe, color = Source)) +
 
 ```
 
-```{r fig.height=12 fig.width=20}
+```{r}
 # Create rolling maximum drawdown plot
 drawdown_plot <- ggplot(health_data, aes(x = date, y = rolling_drawdown, color = Source)) +
   geom_line() +
@@ -683,7 +696,7 @@ for(stock in stock_names) {
 
 ```
 
-```{r fig.height=20 fig.width=15}
+```{r}
 library(gridExtra)
 library(grid)
 performance_metrics <- banking_data |>
@@ -741,7 +754,7 @@ ggplot(banking_data, aes(x = date, y = rolling_sharpe, color = Source)) +
 
 ```
 
-```{r fig.height=12 fig.width=20}
+```{r}
 # Create rolling maximum drawdown plot
 drawdown_plot <- ggplot(banking_data, aes(x = date, y = rolling_drawdown, color = Source)) +
   geom_line() +
@@ -854,7 +867,7 @@ for(stock in stock_names) {
 
 ```
 
-```{r fig.height=20 fig.width=15}
+```{r}
 library(gridExtra)
 library(grid)
 performance_metrics <- tech_data %>%
@@ -912,7 +925,7 @@ ggplot(tech_data, aes(x = date, y = rolling_sharpe, color = Source)) +
 
 ```
 
-```{r fig.height=12 fig.width=20}
+```{r}
 # Create rolling maximum drawdown plot
 drawdown_plot <- ggplot(tech_data, aes(x = date, y = rolling_drawdown, color = Source)) +
   geom_line() +
@@ -941,7 +954,7 @@ ggplot(tech_data, aes(x = date, y = rolling_drawdown)) +
 ```{r}
 library(purrr)
 # Clean and prepare the data
-stocks_data <- health_data %>%
+health_data <- health_data %>%
   filter(!is.na(date) & !is.na(close)) %>%  # Remove rows with missing Date or Price
   mutate(Date = as.Date(date)) %>%          # Convert Date to Date format
   arrange(Sector, Source, date)
@@ -1002,8 +1015,8 @@ analyze_seasonal_patterns <- function(data, sector) {
 }
 
 # Perform analysis sector by sector
-sectors <- unique(stocks_data$Sector)
-results <- map(sectors, ~ analyze_seasonal_patterns(stocks_data, .x))
+sectors <- unique(health_data$Sector)
+results <- map(sectors, ~ analyze_seasonal_patterns(health_data, .x))
 
 # Save or display plots
 walk2(sectors, results, function(sector, sector_result) {
@@ -1022,14 +1035,14 @@ walk2(sectors, results, function(sector, sector_result) {
 
 
 # Clean and prepare the data
-stocks_data <- banking_data %>%
+banking_data <- banking_data %>%
   filter(!is.na(date) & !is.na(close)) %>%  # Remove rows with missing Date or Price
   mutate(Date = as.Date(date)) %>%          # Convert Date to Date format
   arrange(Sector, Source, date)
 
 # Perform analysis sector by sector
-sectors <- unique(stocks_data$Sector)
-results <- map(sectors, ~ analyze_seasonal_patterns(stocks_data, .x))
+sectors <- unique(banking_data$Sector)
+results <- map(sectors, ~ analyze_seasonal_patterns(banking_data, .x))
 
 # Save or display plots
 walk2(sectors, results, function(sector, sector_result) {
@@ -1054,15 +1067,15 @@ library(ggplot2)
 library(tseries)
 
 # Clean and prepare the data
-stocks_data <- tech_data %>%
+tech_data <- tech_data %>%
   filter(!is.na(date) & !is.na(close)) %>%  # Remove rows with missing Date or Price
   mutate(Date = as.Date(date)) %>%          # Convert Date to Date format
   arrange(Sector, Source, date)
 
 
 # Perform analysis sector by sector
-sectors <- unique(stocks_data$Sector)
-results <- map(sectors, ~ analyze_seasonal_patterns(stocks_data, .x))
+sectors <- unique(tech_data$Sector)
+results <- map(sectors, ~ analyze_seasonal_patterns(tech_data, .x))
 
 # Save or display plots
 walk2(sectors, results, function(sector, sector_result) {
@@ -1074,4 +1087,40 @@ walk2(sectors, results, function(sector, sector_result) {
 })
 
 
+```
+
+```{r}
+unique_finance_sources <- unique(banking_data$Source)
+unique_healthcare_sources <- unique(health_data$Source)
+unique_tech_sources <- unique(tech_data$Source)
+
+modify_file_path <- function(file_path) {
+  file_name <- tools::file_path_sans_ext(file_path)  
+  file_extension <- tools::file_ext(file_path)      #
+  modified_file_path <- paste0(file_name, "_modified.", file_extension)
+  return(modified_file_path)
+}
+
+for (source in unique_finance_sources) {
+  file_path <- stock_file_mapping[source]
+  bank_data_source <- banking_data |> filter(Source == source)
+  modified_path <- modify_file_path(file_path)
+  save_to_csv(bank_data_source, modified_path)
+}
+
+for (source in unique_healthcare_sources) {
+  file_path <- stock_file_mapping[source]
+  healthcare_source <- health_data |> filter(Source == source)
+  modified_path <- modify_file_path(file_path)
+  save_to_csv(healthcare_source, modified_path)
+  
+  
+}
+
+for (source in unique_tech_sources) {
+  file_path <- stock_file_mapping[source]
+  tech_source <- tech_data |> filter(Source == source)
+  modified_path <- modify_file_path(file_path)
+  save_to_csv(healthcare_source, modified_path)
+}
 ```
