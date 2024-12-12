@@ -254,7 +254,10 @@ plot <- plot |> layout(
 plot
 ```
 
-### 2.2 Healthcare
+
+### 3 Volatility Analysis
+
+### 3.1 Healthcare
 
 ```{r}
 # Install and load required packages
@@ -429,7 +432,7 @@ ggplot(health_data, aes(x = date, y = rolling_drawdown)) +
   facet_wrap(~ Source)
 ```
 
-### 2.3 Finance
+### 3.2 Finance
 
 ```{r}
 # Install and load required packages
