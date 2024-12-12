@@ -70,7 +70,7 @@ combined_data <- combined_data |>
   rename(Stock = Source)
 
 # Create the faceted line chart with sectors arranged in rows
-p <- ggplot(all, aes(x = date, y = close, color = Stock)) +
+p <- ggplot(combined_data, aes(x = date, y = close, color = Stock)) +
   geom_line(size = 1) +
   facet_grid(Sector ~ ., scales = "free_y") +  # Arrange facets in rows
   labs(
@@ -94,7 +94,7 @@ print(p)
 ## Opening Price
 
 ```{r fig.height=12, fig.width=15}
-p <- ggplot(all, aes(x = date, y = open, color = Stock)) +
+p <- ggplot(combined_data, aes(x = date, y = open, color = Stock)) +
   geom_line(size = 1) +
   facet_grid(Sector ~ ., scales = "free_y") +  # Arrange facets in rows
   labs(
@@ -118,7 +118,7 @@ print(p)
 ## Trade Volume
 
 ```{r fig.height=12, fig.width=15}
-p <- ggplot(all, aes(x = date, y = volume, color = Stock)) +
+p <- ggplot(combined_data, aes(x = date, y = volume, color = Stock)) +
   geom_line(size = 1) +
   facet_grid(Sector ~ ., scales = "free_y") +  # Facet rows by Sector
   labs(
@@ -253,7 +253,6 @@ plot <- plot |> layout(
 # Display the plot
 plot
 ```
-
 
 ### 3 Volatility Analysis
 
@@ -642,6 +641,7 @@ ggplot(tech_data_clean, aes(x = date, y = daily_returns, color = Source)) +
   labs(title = "Daily Returns by Stock", x = "Date", y = "Daily Return (%)") +
   theme_minimal()
 ```
+
 ```{r}
 # Plot volatility
 tech_data_clean <- tech_data %>% filter(!is.na(volatility))
@@ -650,6 +650,7 @@ ggplot(tech_data_clean, aes(x = date, y = volatility, color = Source)) +
   labs(title = "Volatility (20-Day Rolling Standard Deviation) by Stock", x = "Date", y = "Volatility (%)") +
   theme_minimal()
 ```
+
 ```{r}
 library(TTR)
 
@@ -775,4 +776,4 @@ ggplot(tech_data, aes(x = date, y = rolling_drawdown)) +
   facet_wrap(~ Source)
 ```
 
-### 2.3 Finance
+### 
