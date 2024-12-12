@@ -934,4 +934,151 @@ ggplot(tech_data, aes(x = date, y = rolling_drawdown)) +
   facet_wrap(~ Source)
 ```
 
-### 
+### Seasonal Patterns and Cycles
+
+#### Healthcare
+```{r}
+# Clean and prepare the data
+stocks_data <- health_data %>%
+  filter(!is.na(date) & !is.na(close)) %>%  # Remove rows with missing Date or Price
+  mutate(Date = as.Date(date)) %>%          # Convert Date to Date format
+  arrange(Sector, Source, date)
+
+# Define a function to perform seasonal decomposition and Fourier analysis
+analyze_seasonal_patterns <- function(data, sector) {
+  # Filter data for the given sector
+  sector_data <- data %>% filter(Sector == sector)
+
+  # Perform analysis for each stock
+  sector_analysis <- sector_data %>%
+    group_by(Source) %>%
+    summarise(
+      decomposed_plot = list({
+        tryCatch({
+          # Convert to time series object
+          ts_data <- ts(
+            close,
+            frequency = 365,
+            start = c(year(min(date)), yday(min(date)))
+          )
+
+          # Seasonal decomposition
+          decomposed <- stl(ts_data, s.window = "periodic")
+
+          # Plot decomposition
+          autoplot(decomposed) + 
+            ggtitle(paste("Seasonal Decomposition of", sector, "-", unique(Source)))
+        }, error = function(e) {
+          message(paste("Error processing decomposition for stock:", unique(Source)))
+          NULL
+        })
+      }),
+      fourier_plot = list({
+        tryCatch({
+          # Fourier transform
+          ts_data <- ts(
+            close,
+            frequency = 365,
+            start = c(year(min(date)), yday(min(date)))
+          )
+          spec <- spectrum(ts_data, spans = c(3, 3))
+
+          # Return spectral density plot
+          ggplot(data.frame(Frequency = spec$freq, SpectralDensity = spec$spec),
+                 aes(x = Frequency, y = SpectralDensity)) +
+            geom_line() +
+            ggtitle(paste("Spectral Density of", sector, "-", unique(Source)))
+        }, error = function(e) {
+          message(paste("Error processing Fourier analysis for stock:", unique(Source)))
+          NULL
+        })
+      })
+    )
+
+  # Return analysis
+  return(sector_analysis)
+}
+
+# Perform analysis sector by sector
+sectors <- unique(stocks_data$Sector)
+results <- map(sectors, ~ analyze_seasonal_patterns(stocks_data, .x))
+
+# Save or display plots
+walk2(sectors, results, function(sector, sector_result) {
+  message(paste("Processing sector:", sector))
+  walk2(sector_result$decomposed_plot, sector_result$fourier_plot, function(decomp_plot, fourier_plot) {
+    if (!is.null(decomp_plot)) print(decomp_plot)
+    if (!is.null(fourier_plot)) print(fourier_plot)
+  })
+})
+
+
+```
+
+
+#### Finance
+
+```{r}
+
+# Load necessary libraries
+library(tidyverse)
+library(lubridate)
+library(forecast)
+library(ggplot2)
+library(tseries)
+
+
+# Clean and prepare the data
+stocks_data <- banking_data %>%
+  filter(!is.na(date) & !is.na(close)) %>%  # Remove rows with missing Date or Price
+  mutate(Date = as.Date(date)) %>%          # Convert Date to Date format
+  arrange(Sector, Source, date)
+
+# Perform analysis sector by sector
+sectors <- unique(stocks_data$Sector)
+results <- map(sectors, ~ analyze_seasonal_patterns(stocks_data, .x))
+
+# Save or display plots
+walk2(sectors, results, function(sector, sector_result) {
+  message(paste("Processing sector:", sector))
+  walk2(sector_result$decomposed_plot, sector_result$fourier_plot, function(decomp_plot, fourier_plot) {
+    if (!is.null(decomp_plot)) print(decomp_plot)
+    if (!is.null(fourier_plot)) print(fourier_plot)
+  })
+})
+
+
+```
+
+#### Technology
+```{r}
+
+# Load necessary libraries
+library(tidyverse)
+library(lubridate)
+library(forecast)
+library(ggplot2)
+library(tseries)
+
+# Clean and prepare the data
+stocks_data <- tech_data %>%
+  filter(!is.na(date) & !is.na(close)) %>%  # Remove rows with missing Date or Price
+  mutate(Date = as.Date(date)) %>%          # Convert Date to Date format
+  arrange(Sector, Source, date)
+
+
+# Perform analysis sector by sector
+sectors <- unique(stocks_data$Sector)
+results <- map(sectors, ~ analyze_seasonal_patterns(stocks_data, .x))
+
+# Save or display plots
+walk2(sectors, results, function(sector, sector_result) {
+  message(paste("Processing sector:", sector))
+  walk2(sector_result$decomposed_plot, sector_result$fourier_plot, function(decomp_plot, fourier_plot) {
+    if (!is.null(decomp_plot)) print(decomp_plot)
+    if (!is.null(fourier_plot)) print(fourier_plot)
+  })
+})
+
+
+```
