@@ -253,11 +253,6 @@ plot <- plot %>% layout(
 plot
 ```
 ### 2.2 Healthcare
-### 2.3 Finance
-
-### 3. Volatility Index Analysis
-### 3.1 Banking
-### 3.2 Healthcare
 
 ```{r}
 # Install and load required packages
@@ -467,4 +462,6 @@ ggplot(tech_data_clean, aes(x = date, y = daily_returns, color = Source)) +
   labs(title = "Daily Returns by Stock", x = "Date", y = "Daily Return (%)") +
   theme_minimal()
 ```
+### 2.3 Finance
+
 
