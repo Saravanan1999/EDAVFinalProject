@@ -40,7 +40,7 @@ read_sector_data <- function(file_path, sector) {
                "-> Missing columns:", paste(missing_columns, collapse = ", ")))
   }
   
-  data <- data %>%
+  data <- data |>
     mutate(
       date = mdy(date),  
       close = as.numeric(gsub("\\$", "", close)),  
@@ -48,7 +48,7 @@ read_sector_data <- function(file_path, sector) {
       high = as.numeric(gsub("\\$", "", high)),
       low = as.numeric(gsub("\\$", "", low)),
       volume = as.numeric(gsub(",", "", volume))  
-    ) %>%
+    ) |>
     mutate(
       Sector = sector,
       Source = tools::file_path_sans_ext(basename(file_path))
@@ -150,14 +150,14 @@ library(plotly)
 library(zoo)
 
 # Extract stock names from the Source column and pivot the data
-wide_data <- tech_data %>% 
-  mutate(Stock = sub(" Historical data", "", Source)) %>% 
-  select(date, close, Stock) %>% 
-  pivot_wider(names_from = Stock, values_from = close) %>% 
+wide_data <- tech_data |> 
+  mutate(Stock = sub(" Historical data", "", Source)) |> 
+  select(date, close, Stock) |> 
+  pivot_wider(names_from = Stock, values_from = close) |> 
   arrange(date)
 
 # Fill missing values using linear interpolation
-wide_data <- wide_data %>% 
+wide_data <- wide_data |> 
   mutate(across(-date, ~ na.approx(.x, na.rm = FALSE)))
 
 # Define significant world events and their dates
@@ -176,13 +176,13 @@ analyze_event_impact <- function(stock_data, event_date) {
   pre_event_date <- event_date - days(3)
   post_event_date <- event_date + days(3)
   
-  relevant_prices <- stock_data %>% 
+  relevant_prices <- stock_data |> 
     filter(date >= pre_event_date & date <= post_event_date)
   
   stock_columns <- setdiff(names(relevant_prices), "date")
   
-  returns <- relevant_prices %>% 
-    mutate(across(all_of(stock_columns), ~ (.x / lag(.x) - 1) * 100, .names = "{.col}_return")) %>%
+  returns <- relevant_prices |> 
+    mutate(across(all_of(stock_columns), ~ (.x / lag(.x) - 1) * 100, .names = "{.col}_return")) |>
     # Add event date for reference
     mutate(event_date = event_date)
   
@@ -190,26 +190,26 @@ analyze_event_impact <- function(stock_data, event_date) {
 }
 
 # Apply the function to each event and combine the results
-impact_results <- events %>% 
-  rowwise() %>% 
-  do(analyze_event_impact(wide_data, .$date)) %>% 
+impact_results <- events |> 
+  rowwise() |> 
+  do(analyze_event_impact(wide_data, .$date)) |> 
   ungroup()
 
 # Combine results into a single data frame for reporting
 results_df <- bind_rows(impact_results)
 
 # Remove rows with all NA values in return columns
-results_df <- results_df %>% 
+results_df <- results_df |> 
   filter(if_any(ends_with("_return"), ~ !is.na(.)))
 
 # Prepare data for plotting
-plot_data <- results_df %>% 
+plot_data <- results_df |> 
   pivot_longer(
     cols = ends_with("_return"), 
     names_to = "Stock", 
     values_to = "Return",
     names_pattern = "(.+)_return"
-  ) %>% 
+  ) |> 
   filter(!is.na(Return))
 
 # Create interactive plot using plotly
@@ -218,9 +218,9 @@ plot <- plot_ly()
 # Add a trace for each stock
 stocks <- unique(plot_data$Stock) # Get unique stock names from plot_data
 for (stock in stocks) {
-  stock_data <- plot_data %>% filter(Stock == stock)
+  stock_data <- plot_data |> filter(Stock == stock)
   
-  plot <- plot %>% add_trace(
+  plot <- plot |> add_trace(
     type = 'scatter',
     mode = 'lines+markers',
     x = stock_data$date,
@@ -233,7 +233,7 @@ for (stock in stocks) {
 
 # Add vertical lines for events
 for (i in seq_along(events$date)) {
-  plot <- plot %>% add_segments(
+  plot <- plot |> add_segments(
     x = events$date[i], xend = events$date[i],
     y = min(plot_data$Return, na.rm = TRUE), yend = max(plot_data$Return, na.rm = TRUE),
     line = list(color = 'red', dash='dash'),
@@ -242,7 +242,7 @@ for (i in seq_along(events$date)) {
 }
 
 # Customize layout
-plot <- plot %>% layout(
+plot <- plot |> layout(
   title = "Stock Price Changes Around Major Events",
   xaxis = list(title = "Date"),
   yaxis = list(title = "Percentage Change (%)"),
@@ -263,27 +263,27 @@ library(ggplot2)
 library(dplyr)
 
 # Calculate daily returns
-health_data <- health_data %>%
-  group_by(Source) %>%
-  arrange(date) %>%
-  mutate(daily_return = (close / lag(close) - 1) * 100) %>%
+health_data <- health_data |>
+  group_by(Source) |>
+  arrange(date) |>
+  mutate(daily_return = (close / lag(close) - 1) * 100) |>
   ungroup()
 
 # Calculate volatility (20-day rolling standard deviation of returns)
-health_data <- health_data %>%
-  group_by(Source) %>%
-  mutate(volatility = slide_dbl(daily_return, sd, .before = 19, .complete = TRUE)) %>%
+health_data <- health_data |>
+  group_by(Source) |>
+  mutate(volatility = slide_dbl(daily_return, sd, .before = 19, .complete = TRUE)) |>
   ungroup()
 
 # Calculate average returns
-avg_returns <- health_data %>%
-  group_by(Source) %>%
-  summarize(avg_daily_return = mean(daily_return, na.rm = TRUE)) %>%
+avg_returns <- health_data |>
+  group_by(Source) |>
+  summarize(avg_daily_return = mean(daily_return, na.rm = TRUE)) |>
   arrange(desc(avg_daily_return))
 
 print(avg_returns)
 
-health_data_clean <- health_data %>% filter(!is.na(daily_return))
+health_data_clean <- health_data |> filter(!is.na(daily_return))
 
 # Plot daily returns
 ggplot(health_data_clean, aes(x = date, y = daily_return, color = Source)) +
@@ -295,7 +295,7 @@ ggplot(health_data_clean, aes(x = date, y = daily_return, color = Source)) +
 
 ```{r}
 # Plot volatility
-health_data_clean <- health_data %>% filter(!is.na(volatility))
+health_data_clean <- health_data |> filter(!is.na(volatility))
 ggplot(health_data_clean, aes(x = date, y = volatility, color = Source)) +
   geom_line() +
   labs(title = "Volatility (20-Day Rolling Standard Deviation) by Stock", x = "Date", y = "Volatility (%)") +
@@ -310,10 +310,10 @@ health_data <- health_data |>
   mutate(RSI = TTR::RSI(close, n = 14)) |>
   ungroup()
 
-health_data <- health_data %>% filter(!is.na(RSI))
+health_data <- health_data |> filter(!is.na(RSI))
 
 create_rsi_plot <- function(data, stock_name) {
-  stock_data <- data %>% filter(Source == stock_name)
+  stock_data <- data |> filter(Source == stock_name)
   
   ggplot(stock_data, aes(x = date)) +
     geom_rect(aes(xmin = min(date), xmax = max(date), ymin = 70, ymax = 100), 
@@ -350,22 +350,22 @@ for(stock in stock_names) {
 ```{r fig.height=20 fig.width=15}
 library(gridExtra)
 library(grid)
-performance_metrics <- health_data %>%
-  group_by(Source) %>%
+performance_metrics <- health_data |>
+  group_by(Source) |>
   summarize(
     sharpe_ratio = mean(daily_return, na.rm = TRUE) / 
                   sd(daily_return, na.rm = TRUE) * sqrt(252),
     max_drawdown = min(cumsum(daily_return), na.rm = TRUE),
     avg_volatility = mean(volatility, na.rm = TRUE)
-  ) %>%
+  ) |>
   arrange(desc(sharpe_ratio))
 
 print(performance_metrics)
 
 # Calculate rolling metrics
-health_data <- health_data %>%
-  group_by(Source) %>%
-  arrange(date) %>%
+health_data <- health_data |>
+  group_by(Source) |>
+  arrange(date) |>
   mutate(
     # Rolling Sharpe Ratio (252-day window)
     rolling_returns_mean = zoo::rollmean(daily_return, k = 252, fill = NA),
@@ -376,11 +376,11 @@ health_data <- health_data %>%
     cumulative_return = cumprod(1 + daily_return),
     rolling_max = zoo::rollmax(cumulative_return, k = 252, fill = NA),
     rolling_drawdown = (cumulative_return - rolling_max) / rolling_max
-  ) %>%
+  ) |>
   ungroup()
 
-health_data <- health_data %>% filter(!is.na(rolling_sharpe))
-health_data <- health_data %>% filter(!is.na(rolling_drawdown))
+health_data <- health_data |> filter(!is.na(rolling_sharpe))
+health_data <- health_data |> filter(!is.na(rolling_drawdown))
 
 
 # Create rolling Sharpe ratio plot
@@ -426,6 +426,183 @@ ggplot(health_data, aes(x = date, y = rolling_drawdown)) +
   ) +
   facet_wrap(~ Source)
 ```
+### 2.3 Finance
+```{r}
+# Install and load required packages
+# Install and load required packages
+#install.packages("slider")
+library(slider)
+library(ggplot2)
+library(dplyr)
+
+# Calculate daily returns
+banking_data <- banking_data |>
+  group_by(Source) |>
+  arrange(date) |>
+  mutate(daily_return = (close / lag(close) - 1) * 100) |>
+  ungroup()
+
+# Calculate volatility (20-day rolling standard deviation of returns)
+banking_data <- banking_data |>
+  group_by(Source) |>
+  mutate(volatility = slide_dbl(daily_return, sd, .before = 19, .complete = TRUE)) |>
+  ungroup()
+
+# Calculate average returns
+avg_returns <- banking_data |>
+  group_by(Source) |>
+  summarize(avg_daily_return = mean(daily_return, na.rm = TRUE)) |>
+  arrange(desc(avg_daily_return))
+
+print(avg_returns)
+
+banking_data_clean <- banking_data |> filter(!is.na(daily_return))
+
+# Plot daily returns
+ggplot(banking_data_clean, aes(x = date, y = daily_return, color = Source)) +
+  geom_line() +
+  labs(title = "Daily Returns by Stock", x = "Date", y = "Daily Return (%)") +
+  theme_minimal()
+
+```
+
+```{r}
+# Plot volatility
+banking_data_clean <- banking_data |> filter(!is.na(volatility))
+ggplot(banking_data_clean, aes(x = date, y = volatility, color = Source)) +
+  geom_line() +
+  labs(title = "Volatility (20-Day Rolling Standard Deviation) by Stock", x = "Date", y = "Volatility (%)") +
+  theme_minimal()
+```
+
+```{r}
+library(TTR)
+
+banking_data <- banking_data |>
+  group_by(Source) |>
+  mutate(RSI = TTR::RSI(close, n = 14)) |>
+  ungroup()
+
+banking_data <- banking_data |> filter(!is.na(RSI))
+
+create_rsi_plot <- function(data, stock_name) {
+  stock_data <- data |> filter(Source == stock_name)
+  
+  ggplot(stock_data, aes(x = date)) +
+    geom_rect(aes(xmin = min(date), xmax = max(date), ymin = 70, ymax = 100), 
+              fill = "pink", alpha = 0.2) +
+    geom_rect(aes(xmin = min(date), xmax = max(date), ymin = 0, ymax = 30), 
+              fill = "lightgreen", alpha = 0.2) +
+    geom_line(aes(y = RSI), color = "black", linewidth = 0.8) +
+    geom_hline(yintercept = 70, color = "red", linetype = "dashed", linewidth = 0.8) +
+    geom_hline(yintercept = 30, color = "green", linetype = "dashed", linewidth = 0.8) +
+    geom_hline(yintercept = 50, color = "gray", linetype = "dotted") +
+    labs(title = paste("RSI Over Time -", stock_name), 
+         subtitle = "With Overbought (>70) and Oversold (<30) Zones",
+         x = "Date", 
+         y = "RSI") +
+    scale_y_continuous(limits = c(0, 100)) +
+    theme_minimal() +
+    theme(
+      panel.grid.minor = element_blank(),
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      plot.title = element_text(face = "bold"),
+      plot.subtitle = element_text(size = 9)
+    )
+}
+
+# Create plots for each stock
+stock_names <- unique(banking_data$Source)
+for(stock in stock_names) {
+  print(create_rsi_plot(banking_data, stock))
+}
+
+```
+
+```{r fig.height=20 fig.width=15}
+library(gridExtra)
+library(grid)
+performance_metrics <- banking_data |>
+  group_by(Source) |>
+  summarize(
+    sharpe_ratio = mean(daily_return, na.rm = TRUE) / 
+                  sd(daily_return, na.rm = TRUE) * sqrt(252),
+    max_drawdown = min(cumsum(daily_return), na.rm = TRUE),
+    avg_volatility = mean(volatility, na.rm = TRUE)
+  ) |>
+  arrange(desc(sharpe_ratio))
+
+print(performance_metrics)
+
+# Calculate rolling metrics
+banking_data <- banking_data |>
+  group_by(Source) |>
+  arrange(date) |>
+  mutate(
+    # Rolling Sharpe Ratio (252-day window)
+    rolling_returns_mean = zoo::rollmean(daily_return, k = 252, fill = NA),
+    rolling_returns_sd = zoo::rollapply(daily_return, width = 252, FUN = sd, fill = NA),
+    rolling_sharpe = (rolling_returns_mean / rolling_returns_sd) * sqrt(252),
+    
+    # Rolling Maximum Drawdown
+    cumulative_return = cumprod(1 + daily_return),
+    rolling_max = zoo::rollmax(cumulative_return, k = 252, fill = NA),
+    rolling_drawdown = (cumulative_return - rolling_max) / rolling_max
+  ) |>
+  ungroup()
+
+banking_data <- banking_data |> filter(!is.na(rolling_sharpe))
+banking_data <- banking_data |> filter(!is.na(rolling_drawdown))
+
+
+# Create rolling Sharpe ratio plot
+sharpe_plot <- ggplot(banking_data, aes(x = date, y = rolling_sharpe, color = Source)) +
+  geom_line() +
+  labs(title = "Rolling Sharpe Ratio Over Time (252-day window)",
+       x = "Date", y = "Sharpe Ratio") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+# Arrange plots vertically
+ggplot(banking_data, aes(x = date, y = rolling_sharpe, color = Source)) +
+  geom_line() +
+  labs(title = "Rolling Sharpe Ratio Over Time",
+       x = "Date", y = "Sharpe Ratio") +
+  theme_minimal() +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(face = "bold")
+  )
+
+
+```
+```{r fig.height=12 fig.width=20}
+# Create rolling maximum drawdown plot
+drawdown_plot <- ggplot(banking_data, aes(x = date, y = rolling_drawdown, color = Source)) +
+  geom_line() +
+  labs(title = "Rolling Maximum Drawdown Over Time (252-day window)",
+       x = "Date", y = "Drawdown") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+ggplot(banking_data, aes(x = date, y = rolling_drawdown)) +
+  geom_line() +
+  labs(title = "Rolling Maximum Drawdown Over Time",
+       x = "Date", y = "Drawdown") +
+  theme_minimal() +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(face = "bold")
+  ) +
+  facet_wrap(~ Source)
+```
+
+
+
+
+
+
 
 ### 3.3 Technology
 ```{r}
@@ -434,27 +611,27 @@ library(ggplot2)
 library(dplyr)
 
 # Calculate daily returns
-tech_data <- tech_data %>%
-  group_by(Source) %>%
-  arrange(date) %>%
-  mutate(daily_returns = (close / lag(close) - 1) * 100) %>%
+tech_data <- tech_data |>
+  group_by(Source) |>
+  arrange(date) |>
+  mutate(daily_returns = (close / lag(close) - 1) * 100) |>
   ungroup()
 
 # Calculate volatility (20-day rolling standard deviation of returns)
-tech_data <- tech_data %>%
-  group_by(Source) %>%
-  mutate(volatility = slide_dbl(daily_returns, sd, .before = 19, .complete = TRUE)) %>%
+tech_data <- tech_data |>
+  group_by(Source) |>
+  mutate(volatility = slide_dbl(daily_returns, sd, .before = 19, .complete = TRUE)) |>
   ungroup()
 
 # Calculate average returns
-avg_returns <- tech_data %>%
-  group_by(Source) %>%
-  summarize(avg_daily_return = mean(daily_returns, na.rm = TRUE)) %>%
+avg_returns <- tech_data |>
+  group_by(Source) |>
+  summarize(avg_daily_return = mean(daily_returns, na.rm = TRUE)) |>
   arrange(desc(avg_daily_return))
 
 print(avg_returns)
 
-tech_data_clean <- tech_data %>% filter(!is.na(daily_returns))
+tech_data_clean <- tech_data |> filter(!is.na(daily_returns))
 
 # Plot daily returns
 ggplot(tech_data_clean, aes(x = date, y = daily_returns, color = Source)) +
