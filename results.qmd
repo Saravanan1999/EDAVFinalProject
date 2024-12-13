@@ -220,8 +220,6 @@ for (stock in stocks) {
   )
 }
 
-print(stocks)
-
 # Add vertical lines for events
 for (i in seq_along(events$date)) {
   plot <- plot |> add_segments(
@@ -1018,6 +1016,14 @@ WFC is risky because of their fluctuating trends and inherent issues with their 
 ### Future Scope
 
 A direct implication of this project can be stock price prediction using advanced machine learning techniques.
+
+### Limitations
+
+Due to the extent of our project and our intent to include as much information as possible, we had to exceed the graph limit. We hope that this gave you a basic idea of how stock market functions.
+
+We wanted to do sentiment analysis to effectively find the impacts of each event on the stocks but since it is a very vast topic, we have limited the scope of this project to stay in the path to find out profit generating and safe stocks.
+
+We could have done categorical analysis but to data constraints, we were unable to do so.
 
 ```{r}
 unique_finance_sources <- unique(banking_data$Source)
