@@ -1009,9 +1009,7 @@ We have successfully analyzed industry and stock behavior for 3 major sectors. K
 
 -   BAC
 
-We have concluded that they are safer bets because they seemed more resilient to drastic market changes in the last 5 years. Despite having tumultuous seasons, they were able to recover pretty quickly and gain their momentum. It is also due to the fact that they have been here for long and know how to quickly recover from a market crash. Of course, they do have risks associated with them, but these stocks will continue to grow because of their well structure approach in staying in top of their respective industries. BAC finds a place in this list because of their history of managing risks effectively. Remember during the credit crisis, BAC was one of the few banks to get hit severely. With the help of the government, they were able to recover quickly.
-
-According to [CNBC](https://www.cnbc.com/2022/12/27/how-bofa-came-back-from-the-brink-of-collapse.html), the reason why BAC has a steady growth is due to their ability to say no, so that when they do say yes, it results in a lot more growth.
+We have concluded that they are safer bets because they seemed more resilient to drastic market changes in the last 5 years. Despite having tumultuous seasons, they were able to recover pretty quickly and gain their momentum. It is also due to the fact that they have been here for long and know how to quickly recover from a market crash. Of course, they do have risks associated with them, but these stocks will continue to grow because of their well structure approach in staying in top of their respective industries. BAC finds a place in this list because of their history of managing risks effectively. Remember during the credit crisis, BAC was one of the few banks to get hit severely. With the help of the government, they were able to recover quickly. According to [CNBC](https://www.cnbc.com/2022/12/27/how-bofa-came-back-from-the-brink-of-collapse.html), the reason why BAC has a steady growth is due to their ability to say no, so that when they do say yes, it results in a lot more growth.
 
 Riskier but high profit stocks:
 
@@ -1021,15 +1019,15 @@ Riskier but high profit stocks:
 
 -   WFC
 
-The reason why NVDA tops the list is because of their rapid growth in such a short time and they do not seem to be stopping any time soon. So this involves a lot of risks especially with the current market trends. So this stock although gives you more profit, has immense risk associated with it.
-
-GS has a lot of reliance on investment banking and trading as mentioned above which is sensitive to market volatility. So during a bull market, they are very strong due to their expertise in asset management, trading, etc. This is why there was a huge dip in their drawdown in the late 2022.
-
-WFC is risky because of their fluctuating trends and inherent issues with their reputation which occurred in 2016 ([Source](https://thefinancialbrand.com/news/bank-culture/how-hard-did-cfpb-hit-wells-in-its-reputation-versus-its-wallet-157614/)), so this could be why their stocks had such a volatility.
+The reason why NVDA tops the list is because of their rapid growth in such a short time and they do not seem to be stopping any time soon. So this involves a lot of risks especially with the current market trends. So this stock although gives you more profit, has immense risk associated with it. GS has a lot of reliance on investment banking and trading as mentioned above which is sensitive to market volatility. So during a bull market, they are very strong due to their expertise in asset management, trading, etc. This is why there was a huge dip in their drawdown in the late 2022. WFC is risky because of their fluctuating trends and inherent issues with their reputation which occurred in 2016 ([Source](https://thefinancialbrand.com/news/bank-culture/how-hard-did-cfpb-hit-wells-in-its-reputation-versus-its-wallet-157614/)), so this could be why their stocks had such a volatility.
 
 ### Future Scope
 
 A direct implication of this project can be stock price prediction using advanced machine learning techniques.
+
+Then we could also categorize each stock as undervalued, fairly valued or overvalued based on metrics like EBITDA, P/E ratio etc. This helps in identifying anomalies in the market, investment opportunities etc.
+
+We could also expand this to global markets and include international stocks as well.
 
 ### Limitations
 
@@ -1038,6 +1036,12 @@ Due to the extent of our project and our intent to include as much information a
 We wanted to do sentiment analysis to effectively find the impacts of each event on the stocks but since it is a very vast topic, we have limited the scope of this project to stay in the path to find out profit generating and safe stocks.
 
 We could have done categorical analysis but to data constraints, we were unable to do so.
+
+These are things that we wanted to do but we weren’t able to due to time and data constraints. Categorize each stock based on their market capitalisation as Large-Cap, Mid-Cap or Small-Cap. THis helps in analysing risks, performance trends and helps investors align their portfolios with their tolerance for risk. We could use Stacked Bar Chart to visualise this. Find short-term and long-term profit stocks.
+
+### Learnings
+
+We learnt a lot about the behaviour of each stock and how deeply it can get affected by something as simple as protests or riots or as huge as the pandemic. This increased our existing knowledge about stocks and how to conduct technical analysis to find out which stock to invest in. We hope that you were able to take away these key aspects of the project as we did.
 
 ```{r}
 unique_finance_sources <- unique(banking_data$Source)
