@@ -517,7 +517,7 @@ ggplot(health_data, aes(x = date, y = rolling_drawdown)) +
     axis.text.x = element_text(angle = 45, hjust = 1),
     plot.title = element_text(face = "bold")
   ) +
-  facet_wrap(~ Source)
+  facet_wrap(~Source)
 ```
 
 The graph shows the rolling maximum drawdown over time for historical data from five pharmaceutical companies. AZN, JNJ, LLY, and PFE displayed stability with minimal drawdowns, indicating consistent performance and a low risk of losses during the observed period. However, MRK stands out due to a sharp drawdown in 2023, suggesting a significant decline in its stock value during 2023, which could be because of specific events or financial difficulties.
@@ -696,7 +696,7 @@ ggplot(banking_data, aes(x = date, y = rolling_drawdown)) +
     axis.text.x = element_text(angle = 45, hjust = 1),
     plot.title = element_text(face = "bold")
   ) +
-  facet_wrap(~ Source)
+  facet_wrap(~Source)
 ```
 
 Unlike Tech(which we will see below), all stocks here show pronounced drawdowns and dips to -1, reflecting significant volatility. For some, it exceeds -2.0, which is very concerning. On taking a closer look, these drawdowns seem more pronounced in late 2022 to 2023. This could be because of interest rate changes, regulatory impacts etc. Since the banking sector is more prone to such events, this just proves our previous statement that major economic events impact banking sectors more. GS and WFC have the most extreme drawdowns, indicating higher susceptibility to large losses. Morgan Stanley seems relatively stable to these market conditions with fewer dips.
@@ -845,7 +845,7 @@ ggplot(tech_data, aes(x = date, y = rolling_drawdown)) +
     axis.text.x = element_text(angle = 45, hjust = 1),
     plot.title = element_text(face = "bold")
   ) +
-  facet_wrap(~ Source)
+  facet_wrap(~Source)
 ```
 
 For most stocks, the drawdowns dipped to the negatives suggesting a greater decline in value in relation to the previous peak.This clearly indicates market stress and concerns. Contrastingly, there are also periods of stability where the stocks have smaller drawdowns showcasing a stable performance. But, if we take a closer look at the major dips, they seem to have occurred at around the same time. This is where our events analysis comes in handy. If we analyse at what time these dips occurred, we can find a reason for this heavy market stress.
@@ -858,13 +858,20 @@ Implications: There is a downside risk for each stock except NVDA, which maintai
 
 ```{r}
 library(purrr)
+library(tidyverse)
+library(lubridate)
+library(forecast)
+library(ggplot2)
+library(tseries)
+health_data <- health_data |> 
+  filter(!is.na(close)) |> 
+  mutate(close = as.numeric(close))
 # Clean and prepare the data
 health_data <- health_data |>
   filter(!is.na(date) & !is.na(close)) |>  # Remove rows with missing Date or Price
   mutate(Date = as.Date(date)) |>          # Convert Date to Date format
   arrange(Sector, Source, date)
 
-# Define a function to perform seasonal decomposition and Fourier analysis
 analyze_seasonal_patterns <- function(data, sector) {
   # Filter data for the given sector
   sector_data <- data |> filter(Sector == sector)
@@ -898,7 +905,6 @@ analyze_seasonal_patterns <- function(data, sector) {
   # Return analysis
   return(sector_analysis)
 }
-
 # Perform analysis sector by sector
 sectors <- unique(health_data$Sector)
 results <- map(sectors, ~ analyze_seasonal_patterns(health_data, .x))
@@ -921,12 +927,18 @@ All the stocks in healthcare show seasonality, because of frequent product launc
 ### 4.2 Finance
 
 ```{r}
-
+library(tidyverse)
+library(lubridate)
+library(forecast)
+library(ggplot2)
+library(tseries)
+# Clean and prepare the data
 # Clean and prepare the data
 banking_data <- banking_data |>
   filter(!is.na(date) & !is.na(close)) |>  # Remove rows with missing Date or Price
   mutate(Date = as.Date(date)) |>          # Convert Date to Date format
   arrange(Sector, Source, date)
+
 
 # Perform analysis sector by sector
 sectors <- unique(banking_data$Sector)
@@ -973,8 +985,6 @@ walk2(sectors, results, function(sector, sector_result) {
     if (!is.null(decomp_plot)) print(decomp_plot)
   })
 })
-
-
 ```
 
 Except META, every other company exhibits a steady upward trend which reflects growth and investor confidence. We can see that MSFT and META prone to seasonal effects linked to industry cycles.
