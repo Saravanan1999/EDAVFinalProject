@@ -13,7 +13,8 @@ This section presents the key findings from our sector-based financial analysis 
 
 ### 1.1 Closing Price
 
-```{r}
+```{r fig.width=20, fig.height=15}
+
 library(ggplot2)
 library(dplyr)
 library(readr)
@@ -102,7 +103,8 @@ Now, let’s move on to Opening prices. Opening price is the first trading price
 
 Moving on to the next phase of our analysis: Trading Volumes. This step is crucial as it sets the tone for our subsequent analysis focused on events.
 
-```{r}
+```{r fig.width=20, fig.height=15}
+
 p <- ggplot(combined_data, aes(x = date, y = volume, color = Stock)) +
   geom_line(size = 1) +
   facet_grid(Sector ~ ., scales = "free_y") +  
@@ -112,6 +114,7 @@ p <- ggplot(combined_data, aes(x = date, y = volume, color = Stock)) +
     y = "Volume",
     color = "Stock"
   ) +
+  scale_y_continuous(labels = scales::comma) +
   theme_minimal() +
   theme(
     plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
@@ -120,6 +123,7 @@ p <- ggplot(combined_data, aes(x = date, y = volume, color = Stock)) +
   )
 
 print(p)
+
 
 ```
 
